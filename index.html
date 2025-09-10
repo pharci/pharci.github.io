@@ -14,16 +14,17 @@
     --muted:#9aa4b2;
     --accent1:#7c5cff;
     --accent2:#00e0a1;
-    --glass: rgba(255,255,255,0.04);
-    --glass-2: rgba(255,255,255,0.02);
+    --glass: rgba(255,255,255,0.1);
+    --glass-2: rgba(255,255,255,0.05);
     --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
   body{
     margin:0;
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    background: linear-gradient(180deg,#050608 0%, #071017 60%), radial-gradient(600px 400px at 10% 10%, rgba(124,92,255,0.06), transparent 10%), var(--bg);
+    background: 
+    radial-gradient(600px 400px at 10% 10%, rgba(124, 92, 255, 0.08), transparent 40%),
+    linear-gradient(180deg, #050608 0%, #071017 100%);
     color:#e6eef6;
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
@@ -58,6 +59,7 @@
 
   /* main card */
   .card{
+    margin-bottom:18px;
     background:linear-gradient(180deg,var(--glass),var(--glass-2));
     border-radius:16px;padding:18px;border:1px solid rgba(255,255,255,0.03);
     box-shadow: 0 6px 40px rgba(2,6,23,0.6);
@@ -65,7 +67,6 @@
   }
 
   /* left column */
-  .about{margin-bottom:18px}
   .about h3{margin:0 0 8px;font-size:14px}
   .about p{margin:0;color:var(--muted);font-size:14px}
 
@@ -90,7 +91,7 @@
   .project p{margin:0;color:var(--muted);font-size:13px}
 
   /* right column */
-  aside{display:flex;flex-direction:column;gap:16px}
+  aside{display:flex;flex-direction:column;}
   .contact-list{display:flex;flex-direction:column;gap:8px}
   .contact-row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)}
   .contact-row a{color:#e6eef6;text-decoration:none;font-weight:600;font-size:13px}
@@ -118,7 +119,7 @@
 <body>
   <div class="wrap" id="app">
     <header>
-      <div class="avatar">Лёха</div>
+      <img class="avatar" src="avatar.jpg" alt="Лёха" width="100" height="100" style="border-radius:50%;">
       <div class="title">
         <h1>Лёха — студент, разработчик (C++ / Qt / Python)</h1>
         <p>Фокус: учебные и исследовательские проекты. Люблю писать чистый C++/Qt-код без .ui, собирать через CMake, экспериментировать с FastAPI и Svelte.</p>
