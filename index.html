@@ -1,136 +1,976 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Resume</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Резюме-портфолио Алексея — backend-разработчика. Django, Python, C#, C++, Qt, HTML, CSS, JavaScript." />
+  <meta name="theme-color" content="#0b0f17" />
+  <title>Алексей — Backend-разработчик</title>
+  <style>
+    :root {
+      --bg: #070b12;
+      --bg-elevated: rgba(14, 20, 33, 0.72);
+      --bg-elevated-2: rgba(18, 26, 42, 0.86);
+      --text: #e8eefc;
+      --muted: #a6b2cc;
+      --line: rgba(255, 255, 255, 0.08);
+      --primary: #8b5cf6;
+      --primary-2: #22c55e;
+      --accent: #60a5fa;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.22);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --container: 1120px;
+      --transition: 220ms cubic-bezier(.2,.8,.2,1);
+      --focus: 0 0 0 3px rgba(139, 92, 246, 0.28);
+    }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,Arial;background:#0f172a;color:#e2e8f0;line-height:1.5}
-.container{max-width:900px;margin:auto;padding:20px}
+    [data-theme="light"] {
+      --bg: #edf2ff;
+      --bg-elevated: rgba(255, 255, 255, 0.72);
+      --bg-elevated-2: rgba(255, 255, 255, 0.88);
+      --text: #101626;
+      --muted: #52607a;
+      --line: rgba(15, 23, 42, 0.08);
+      --shadow: 0 18px 50px rgba(40, 58, 90, 0.12);
+      --shadow-soft: 0 10px 26px rgba(40, 58, 90, 0.08);
+      --focus: 0 0 0 3px rgba(96, 165, 250, 0.24);
+    }
 
-.card{
-    background:#1e293b;
-    border-radius:16px;
-    padding:20px;
-    margin-bottom:20px;
-    box-shadow:0 10px 30px #0005;
-    transition:.3s;
-}
-.card:hover{transform:translateY(-3px)}
+    * {
+      box-sizing: border-box;
+    }
 
-h1{font-size:28px;margin-bottom:5px}
-h2{font-size:18px;color:#38bdf8;margin-bottom:10px}
-p{opacity:.9}
+    html {
+      scroll-behavior: smooth;
+    }
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 246, 0.20), transparent 32%),
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.16), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 94%, #0f172a 6%) 100%);
+      overflow-x: hidden;
+    }
 
-.tag{
-    display:inline-block;
-    padding:5px 10px;
-    margin:3px;
-    border-radius:8px;
-    background:#334155;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.45), transparent 80%);
+      opacity: 0.28;
+    }
 
-button{
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    background:#38bdf8;
-    color:#000;
-    cursor:pointer;
-    margin-top:10px;
-}
-button:hover{background:#0ea5e9}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-.hidden{display:none}
+    img {
+      max-width: 100%;
+      display: block;
+    }
 
-@media(max-width:700px){
-    .grid{grid-template-columns:1fr}
-}
-</style>
+    .container {
+      width: min(100% - 32px, var(--container));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: var(--shadow-soft);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav a, .btn, .chip-button {
+      border: 1px solid var(--line);
+      background: var(--bg-elevated);
+      color: var(--text);
+      border-radius: 999px;
+      transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition), opacity var(--transition);
+    }
+
+    .nav a {
+      padding: 10px 14px;
+      font-size: 0.95rem;
+    }
+
+    .nav a:hover, .btn:hover, .chip-button:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--primary) 40%, var(--line));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn {
+      padding: 11px 16px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border-color: transparent;
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated-2);
+    }
+
+    .hero {
+      padding: 42px 0 24px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .glass-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-main {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: auto -12% -30% auto;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.24), transparent 68%);
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(2.3rem, 6vw, 4.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.4vw, 1.12rem);
+      line-height: 1.75;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .meta-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 20px;
+    }
+
+    .stat-card {
+      padding: 24px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 2rem;
+      letter-spacing: -0.04em;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      display: block;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    main {
+      padding: 18px 0 56px;
+    }
+
+    section {
+      margin-top: 20px;
+    }
+
+    .section-card {
+      padding: 28px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      font-size: clamp(1.4rem, 3vw, 2.1rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.6;
+    }
+
+    .about-grid, .contact-grid, .projects-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .about-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .info-card, .project-card, .contact-card, .form-card {
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated-2);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      transition: transform var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .info-card:hover, .project-card:hover, .contact-card:hover, .form-card:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--primary) 34%, var(--line));
+    }
+
+    .info-card h3, .project-card h3, .contact-card h3, .form-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.06rem;
+    }
+
+    .info-card p, .project-card p, .contact-card p, .form-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .experience-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      text-align: left;
+      padding: 18px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
+      cursor: pointer;
+    }
+
+    .experience-toggle .arrow {
+      transition: transform var(--transition);
+      opacity: 0.85;
+      font-size: 1.1rem;
+    }
+
+    .experience-toggle[aria-expanded="true"] .arrow {
+      transform: rotate(180deg);
+    }
+
+    .experience-panel {
+      display: grid;
+      gap: 14px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 420ms ease, opacity 320ms ease;
+    }
+
+    .experience-panel.open {
+      opacity: 1;
+    }
+
+    .experience-item {
+      display: grid;
+      gap: 8px;
+      padding: 18px 20px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+    }
+
+    .experience-item header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .experience-item time {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .experience-item ul, .project-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .projects-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .project-card .tag-row,
+    .skills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag, .skill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-size: 0.94rem;
+    }
+
+    .tag::before, .skill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.45);
+    }
+
+    .skills-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: start;
+    }
+
+    .skills-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .goal-box {
+      display: grid;
+      gap: 8px;
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      border: 1px solid color-mix(in srgb, var(--primary) 24%, var(--line));
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.10), rgba(96, 165, 250, 0.06));
+    }
+
+    .goal-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      transition: transform var(--transition), border-color var(--transition);
+    }
+
+    .contact-link:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+    }
+
+    .contact-link span {
+      color: var(--muted);
+      display: block;
+      font-size: 0.94rem;
+    }
+
+    .contact-link strong {
+      display: block;
+      margin-top: 4px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 14px 15px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font: inherit;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    input:focus, textarea:focus {
+      border-color: color-mix(in srgb, var(--primary) 48%, var(--line));
+      box-shadow: var(--focus);
+      background: rgba(255,255,255,0.06);
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .form-status {
+      min-height: 1.4em;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .form-status.error {
+      color: #fca5a5;
+    }
+
+    .form-status.success {
+      color: #86efac;
+    }
+
+    .footer {
+      padding: 18px 0 42px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid, .skills-grid, .contact-grid, .about-grid, .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-header {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .hero-main {
+        padding: 26px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 20px, var(--container));
+      }
+
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .brand {
+        justify-content: center;
+      }
+
+      .nav, .header-actions {
+        justify-content: center;
+      }
+
+      .hero {
+        padding-top: 26px;
+      }
+
+      .hero-main, .section-card {
+        padding: 20px;
+      }
+
+      .experience-toggle {
+        align-items: start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
+<body data-theme="dark">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Перейти к началу страницы">
+        <span class="brand-mark">A</span>
+        <span>Алексей · Backend Portfolio</span>
+      </a>
 
-<body>
-
-<div class="container">
-
-<div class="card">
-    <h1>Алексей</h1>
-    <p>Студент МГТУ «СТАНКИН»</p>
-    <p>Направление: Автоматизация технологических процессов и производств</p>
-</div>
-
-<div class="card">
-    <h2>Обо мне</h2>
-    <p>Развиваюсь в сторону backend и web-разработки. Параллельно изучаю фундаментальные основы программирования и системное мышление. Интерес к созданию реальных продуктов.</p>
-</div>
-
-<div class="card">
-    <h2>Опыт</h2>
-    <p><b>lightbikeshop.ru</b> — разработка и поддержка интернет-магазина (Django)</p>
-    <button onclick="toggle('exp')">Подробнее</button>
-    <div id="exp" class="hidden">
-        <p>• Backend логика</p>
-        <p>• Работа с БД</p>
-        <p>• Поддержка проекта 3+ года</p>
+      <div class="header-actions">
+        <nav class="nav" aria-label="Навигация по странице">
+          <a href="#about">Обо мне</a>
+          <a href="#experience">Опыт</a>
+          <a href="#projects">Проекты</a>
+          <a href="#contacts">Контакты</a>
+        </nav>
+        <button class="btn btn-secondary" id="themeToggle" type="button" aria-label="Переключить тему">Тема</button>
+      </div>
     </div>
-</div>
+  </header>
 
-<div class="card grid">
-    <div>
-        <h2>Навыки</h2>
-        <div class="tag">Python</div>
-        <div class="tag">Django</div>
-        <div class="tag">C#</div>
-        <div class="tag">C++</div>
-        <div class="tag">Qt</div>
-        <div class="tag">HTML/CSS/JS</div>
-    </div>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <article class="hero-main glass-card reveal">
+          <div class="eyebrow">Junior+/Middle портфолио · backend · Django</div>
+          <h1>Алексей</h1>
+          <p class="lead">
+            Студент МГТУ «СТАНКИН», направление автоматизация технологических процессов и производств.
+            Цель — backend-разработчик. Работаю с Django, Python и прикладной логикой для веб-продуктов.
+          </p>
+          <div class="hero-meta">
+            <span class="meta-pill">3+ года Django</span>
+            <span class="meta-pill">Backend · БД · API</span>
+            <span class="meta-pill">Web и desktop</span>
+          </div>
+        </article>
 
-    <div>
-        <h2>Проекты</h2>
-        <p>• Симулятор конвейера (Qt, C++)</p>
-        <p>• Интернет-магазин</p>
-    </div>
-</div>
+        <aside class="hero-side">
+          <div class="stat-card glass-card reveal">
+            <strong>3+</strong>
+            <span>года поддержки и развития интернет-магазина lightbikeshop.ru</span>
+          </div>
+          <div class="stat-card glass-card reveal">
+            <strong>7</strong>
+            <span>основных технологий в стеке: Python, Django, C#, C++, Qt, HTML, CSS, JavaScript</span>
+          </div>
+        </aside>
+      </div>
+    </section>
 
-<div class="card">
-    <h2>Цель</h2>
-    <p>Стать backend-разработчиком. Перейти из учебных задач в реальную индустрию.</p>
-</div>
+    <section id="about">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Обо мне</h2>
+            <p>Фокус на backend-разработке, поддержке рабочих веб-систем и доведении задач до результата.</p>
+          </div>
+        </div>
+        <div class="about-grid">
+          <article class="info-card">
+            <h3>Профиль</h3>
+            <p>Разрабатываю и поддерживаю веб-приложения на Django, работаю с серверной логикой, моделями данных, административной частью и бизнес-процессами.</p>
+          </article>
+          <article class="info-card">
+            <h3>Образование</h3>
+            <p>МГТУ «СТАНКИН», автоматизация технологических процессов и производств. Техническая база помогает быстро разбирать сложные системы и структуру данных.</p>
+          </article>
+          <article class="info-card">
+            <h3>Подход</h3>
+            <p>Пишу читаемый код, держу структуру проекта в порядке, ориентируюсь на практическую применимость и стабильность решения.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<div class="card">
-    <h2>Контакты</h2>
-    <button onclick="scrollToForm()">Связаться</button>
-</div>
+    <section id="experience">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Опыт</h2>
+            <p>Раскрывающийся блок показывает ключевую работу и технический вклад.</p>
+          </div>
+        </div>
 
-<div class="card" id="contact">
-    <h2>Форма</h2>
-    <input id="email" placeholder="Email">
-    <textarea id="msg" placeholder="Сообщение"></textarea>
-    <button onclick="send()">Отправить</button>
-</div>
+        <button class="btn btn-primary experience-toggle" id="experienceToggle" type="button" aria-expanded="false" aria-controls="experiencePanel">
+          <span>Показать детали опыта</span>
+          <span class="arrow">⌄</span>
+        </button>
 
-</div>
+        <div class="experience-panel" id="experiencePanel" aria-hidden="true">
+          <article class="experience-item">
+            <header>
+              <h3>lightbikeshop.ru — разработка и поддержка интернет-магазина</h3>
+              <time>3+ года</time>
+            </header>
+            <p>Работа над backend-частью Django-проекта с регулярной эксплуатационной поддержкой.</p>
+            <ul>
+              <li>Реализация и доработка бизнес-логики.</li>
+              <li>Работа с базой данных, моделями и связями.</li>
+              <li>Поддержка существующих функций и исправление багов.</li>
+              <li>Участие в улучшении структуры проекта и стабильности системы.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<script>
-function toggle(id){
-    document.getElementById(id).classList.toggle("hidden");
-}
+    <section id="projects">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Проекты</h2>
+            <p>Практические работы, в которых видны прикладные навыки и системное мышление.</p>
+          </div>
+        </div>
 
-function scrollToForm(){
-    document.getElementById("contact").scrollIntoView({behavior:"smooth"});
-}
+        <div class="projects-grid">
+          <article class="project-card">
+            <h3>Симулятор конвейера</h3>
+            <p>Курсовой проект на C++ и Qt. Модель последовательной работы механизма с интерфейсом и логикой управления.</p>
+            <ul>
+              <li>Работа с событийной логикой.</li>
+              <li>Интерфейс на Qt.</li>
+              <li>Структурирование состояния процесса.</li>
+            </ul>
+          </article>
+          <article class="project-card">
+            <h3>Веб-проекты на Django</h3>
+            <p>Серверные приложения и доработки, связанные с контентом, пользователями, товарами и внутренней бизнес-логикой.</p>
+            <ul>
+              <li>Модели, представления, формы.</li>
+              <li>Админ-панель и CRUD-сценарии.</li>
+              <li>Работа с шаблонами и данными.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
 
-function send(){
-    let email=document.getElementById("email").value;
-    if(!email.includes("@")) return alert("Некорректный email");
-    alert("Отправлено");
-}
-</script>
+    <section id="skills">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Навыки</h2>
+            <p>Технологии оформлены как теги для быстрого сканирования стека.</p>
+          </div>
+        </div>
+        <div class="skills-grid">
+          <div class="skills-panel">
+            <div class="skills-row" aria-label="Основные навыки">
+              <span class="skill">Python</span>
+              <span class="skill">Django</span>
+              <span class="skill">C#</span>
+              <span class="skill">C++</span>
+              <span class="skill">Qt</span>
+              <span class="skill">HTML</span>
+              <span class="skill">CSS</span>
+              <span class="skill">JavaScript</span>
+            </div>
+          </div>
+          <aside class="goal-box">
+            <h3>Цель</h3>
+            <p>Развиваться как backend-разработчик, усиливать архитектурное мышление, качество кода и глубину работы с Django, БД и серверной логикой.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
 
+    <section id="contacts">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Контакты</h2>
+            <p>Связь и форма обратной связи. Кнопка ниже прокручивает к контакту.</p>
+          </div>
+          <button class="btn btn-secondary" id="scrollToContacts" type="button">К контактам</button>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-list">
+            <a class="contact-link" href="mailto:alexey@example.com">
+              <div>
+                <span>Email</span>
+                <strong>alexey@example.com</strong>
+              </div>
+              <span>↗</span>
+            </a>
+            <a class="contact-link" href="https://github.com/" target="_blank" rel="noopener noreferrer">
+              <div>
+                <span>GitHub</span>
+                <strong>github.com/username</strong>
+              </div>
+              <span>↗</span>
+            </a>
+            <a class="contact-link" href="https://t.me/" target="_blank" rel="noopener noreferrer">
+              <div>
+                <span>Telegram</span>
+                <strong>@username</strong>
+              </div>
+              <span>↗</span>
+            </a>
+          </div>
+
+          <div class="form-card">
+            <h3>Форма</h3>
+            <p>Проверка email выполняется на клиенте перед отправкой.</p>
+            <form id="contactForm" novalidate>
+              <label>
+                Имя
+                <input type="text" name="name" placeholder="Ваше имя" required minlength="2" />
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" id="emailField" placeholder="name@example.com" required />
+              </label>
+              <label>
+                Сообщение
+                <textarea name="message" placeholder="Коротко о задаче или вакансии" required minlength="10"></textarea>
+              </label>
+              <button class="btn btn-primary" type="submit">Отправить</button>
+              <div class="form-status" id="formStatus" aria-live="polite"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Алексей · backend-разработка · GitHub Pages-ready</div>
+  </footer>
+
+  <script>
+    // Переключение темы с сохранением выбора
+    const body = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('portfolio-theme');
+
+    if (savedTheme) {
+      body.setAttribute('data-theme', savedTheme);
+    } else {
+      body.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('portfolio-theme', nextTheme);
+    });
+
+    // Плавный переход к блоку контактов
+    document.getElementById('scrollToContacts').addEventListener('click', () => {
+      document.getElementById('contacts').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Раскрывающийся блок опыта с анимацией высоты
+    const experienceToggle = document.getElementById('experienceToggle');
+    const experiencePanel = document.getElementById('experiencePanel');
+
+    function setExperienceHeight(open) {
+      if (open) {
+        experiencePanel.classList.add('open');
+        experiencePanel.setAttribute('aria-hidden', 'false');
+        experiencePanel.style.maxHeight = experiencePanel.scrollHeight + 'px';
+      } else {
+        experiencePanel.style.maxHeight = experiencePanel.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+          experiencePanel.classList.remove('open');
+          experiencePanel.setAttribute('aria-hidden', 'true');
+          experiencePanel.style.maxHeight = '0px';
+        });
+      }
+    }
+
+    experienceToggle.addEventListener('click', () => {
+      const isOpen = experienceToggle.getAttribute('aria-expanded') === 'true';
+      experienceToggle.setAttribute('aria-expanded', String(!isOpen));
+      setExperienceHeight(!isOpen);
+    });
+
+    window.addEventListener('resize', () => {
+      if (experienceToggle.getAttribute('aria-expanded') === 'true') {
+        experiencePanel.style.maxHeight = experiencePanel.scrollHeight + 'px';
+      }
+    });
+
+    // Появление секций при скролле
+    const revealItems = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealItems.forEach((el) => revealObserver.observe(el));
+
+    // Валидация формы с проверкой email
+    const form = document.getElementById('contactForm');
+    const emailField = document.getElementById('emailField');
+    const formStatus = document.getElementById('formStatus');
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = emailField.value.trim();
+      const message = form.message.value.trim();
+
+      if (name.length < 2) {
+        formStatus.textContent = 'Введите имя минимум из 2 символов.';
+        formStatus.className = 'form-status error';
+        form.name.focus();
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        formStatus.textContent = 'Введите корректный email.';
+        formStatus.className = 'form-status error';
+        emailField.focus();
+        return;
+      }
+
+      if (message.length < 10) {
+        formStatus.textContent = 'Сообщение слишком короткое.';
+        formStatus.className = 'form-status error';
+        form.message.focus();
+        return;
+      }
+
+      formStatus.textContent = 'Форма прошла проверку. Сообщение готово к отправке.';
+      formStatus.className = 'form-status success';
+      form.reset();
+    });
+
+    // Если блок уже открыт к моменту ресайза/загрузки, выставляем корректную высоту
+    if (experienceToggle.getAttribute('aria-expanded') === 'true') {
+      experiencePanel.style.maxHeight = experiencePanel.scrollHeight + 'px';
+    }
+  </script>
 </body>
 </html>
