@@ -1,649 +1,976 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Алексей | Backend-разработчик</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* CSS ПЕРЕМЕННЫЕ */
-        :root {
-            --bg-color: #0f172a;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --glass-blur: blur(12px);
-            --transition: all 0.3s ease;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Резюме-портфолио Алексея — backend-разработчика. Django, Python, C#, C++, Qt, HTML, CSS, JavaScript." />
+  <meta name="theme-color" content="#0b0f17" />
+  <title>Алексей — Backend-разработчик</title>
+  <style>
+    :root {
+      --bg: #070b12;
+      --bg-elevated: rgba(14, 20, 33, 0.72);
+      --bg-elevated-2: rgba(18, 26, 42, 0.86);
+      --text: #e8eefc;
+      --muted: #a6b2cc;
+      --line: rgba(255, 255, 255, 0.08);
+      --primary: #8b5cf6;
+      --primary-2: #22c55e;
+      --accent: #60a5fa;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.22);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --container: 1120px;
+      --transition: 220ms cubic-bezier(.2,.8,.2,1);
+      --focus: 0 0 0 3px rgba(139, 92, 246, 0.28);
+    }
 
-        /* БАЗОВЫЕ НАСТРОЙКИ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    [data-theme="light"] {
+      --bg: #edf2ff;
+      --bg-elevated: rgba(255, 255, 255, 0.72);
+      --bg-elevated-2: rgba(255, 255, 255, 0.88);
+      --text: #101626;
+      --muted: #52607a;
+      --line: rgba(15, 23, 42, 0.08);
+      --shadow: 0 18px 50px rgba(40, 58, 90, 0.12);
+      --shadow-soft: 0 10px 26px rgba(40, 58, 90, 0.08);
+      --focus: 0 0 0 3px rgba(96, 165, 250, 0.24);
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-            /* Декоративный градиентный фон */
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
-            background-attachment: fixed;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        a {
-            text-decoration: none;
-            color: var(--accent);
-            transition: var(--transition);
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        a:hover {
-            color: var(--text-main);
-        }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 246, 0.20), transparent 32%),
+        radial-gradient(circle at top right, rgba(96, 165, 250, 0.16), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.10), transparent 28%),
+        linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 94%, #0f172a 6%) 100%);
+      overflow-x: hidden;
+    }
 
-        /* УТИЛИТЫ */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.45), transparent 80%);
+      opacity: 0.28;
+    }
 
-        .section {
-            padding: 80px 0;
-        }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 40px;
-            font-weight: 600;
-            color: var(--text-main);
-            display: inline-block;
-            position: relative;
-        }
+    img {
+      max-width: 100%;
+      display: block;
+    }
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 50%;
-            height: 3px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
+    .container {
+      width: min(100% - 32px, var(--container));
+      margin: 0 auto;
+    }
 
-        /* СТЕКЛЯННАЯ КАРТОЧКА */
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            transition: var(--transition);
-        }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
 
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
-        }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
 
-        /* КНОПКИ */
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-        }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
 
-        .btn:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -10px var(--accent);
-            color: #fff;
-        }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: var(--shadow-soft);
+      font-size: 1rem;
+      font-weight: 800;
+    }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-        }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-        .btn-outline:hover {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent);
-        }
+    .nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-        /* НАВИГАЦИЯ */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 0;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--card-border);
-        }
+    .nav a, .btn, .chip-button {
+      border: 1px solid var(--line);
+      background: var(--bg-elevated);
+      color: var(--text);
+      border-radius: 999px;
+      transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition), opacity var(--transition);
+    }
 
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .nav a {
+      padding: 10px 14px;
+      font-size: 0.95rem;
+    }
 
-        .logo {
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-main);
-        }
+    .nav a:hover, .btn:hover, .chip-button:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--primary) 40%, var(--line));
+      box-shadow: var(--shadow-soft);
+    }
 
-        .logo span {
-            color: var(--accent);
-        }
+    .btn {
+      padding: 11px 16px;
+      font: inherit;
+      cursor: pointer;
+    }
 
-        /* ГЛАВНЫЙ ЭКРАН (HERO) */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding-top: 80px; /* offset for nav */
-        }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border-color: transparent;
+    }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
+    .btn-secondary {
+      background: var(--bg-elevated-2);
+    }
 
-        .hero-content h2 {
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            font-weight: 400;
-            margin-bottom: 20px;
-        }
+    .hero {
+      padding: 42px 0 24px;
+    }
 
-        .hero-content p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin-bottom: 30px;
-        }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 20px;
+      align-items: stretch;
+    }
 
-        /* ОБО МНЕ & ЦЕЛЬ */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
+    .glass-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
 
-        /* НАВЫКИ */
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+    .hero-main {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .skill-tag {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent);
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: var(--transition);
-        }
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: auto -12% -30% auto;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.24), transparent 68%);
+      filter: blur(8px);
+      pointer-events: none;
+    }
 
-        .skill-tag:hover {
-            background: var(--accent);
-            color: #fff;
-            transform: translateY(-2px);
-        }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
 
-        /* ОПЫТ РАБОТЫ */
-        .experience-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
+    .hero h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(2.3rem, 6vw, 4.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
 
-        .job-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
+    .lead {
+      margin: 0;
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.4vw, 1.12rem);
+      line-height: 1.75;
+    }
 
-        .job-company {
-            color: var(--accent);
-            font-weight: 500;
-        }
+    .hero-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
 
-        .job-duration {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
+    .meta-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
 
-        /* Раскрывающиеся детали опыта */
-        .experience-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
-            opacity: 0;
-        }
+    .hero-side {
+      display: grid;
+      gap: 20px;
+    }
 
-        .experience-details.expanded {
-            max-height: 500px; /* Произвольное большое значение для анимации */
-            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-            opacity: 1;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--card-border);
-        }
+    .stat-card {
+      padding: 24px;
+    }
 
-        .experience-details ul {
-            list-style-position: inside;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-        }
+    .stat-card strong {
+      display: block;
+      font-size: 2rem;
+      letter-spacing: -0.04em;
+    }
 
-        .experience-details li {
-            margin-bottom: 8px;
-        }
+    .stat-card span {
+      color: var(--muted);
+      display: block;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
 
-        /* ПРОЕКТЫ */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
+    main {
+      padding: 18px 0 56px;
+    }
 
-        .project-title {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
+    section {
+      margin-top: 20px;
+    }
 
-        .project-desc {
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            font-size: 0.95rem;
-        }
+    .section-card {
+      padding: 28px;
+    }
 
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: auto;
-        }
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
 
-        .tech-dot {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            background: rgba(255,255,255,0.05);
-            padding: 4px 10px;
-            border-radius: 4px;
-        }
+    .section-header h2 {
+      margin: 0;
+      font-size: clamp(1.4rem, 3vw, 2.1rem);
+      letter-spacing: -0.03em;
+    }
 
-        /* КОНТАКТЫ & ФОРМА */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
+    .section-header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.6;
+    }
 
-        .contact-info p {
-            margin-bottom: 15px;
-            color: var(--text-muted);
-        }
+    .about-grid, .contact-grid, .projects-grid {
+      display: grid;
+      gap: 16px;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .about-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            color: var(--text-main);
-            font-family: inherit;
-            transition: var(--transition);
-        }
+    .info-card, .project-card, .contact-card, .form-card {
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-elevated-2);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      transition: transform var(--transition), border-color var(--transition), background var(--transition);
+    }
 
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: rgba(15, 23, 42, 0.8);
-        }
+    .info-card:hover, .project-card:hover, .contact-card:hover, .form-card:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--primary) 34%, var(--line));
+    }
 
-        .form-error {
-            color: #ef4444;
-            font-size: 0.85rem;
-            margin-top: 5px;
-            display: none;
-        }
+    .info-card h3, .project-card h3, .contact-card h3, .form-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.06rem;
+    }
 
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid var(--card-border);
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
+    .info-card p, .project-card p, .contact-card p, .form-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
 
-        /* АНИМАЦИИ ПОЯВЛЕНИЯ (SCROLL) */
-        .fade-in-section {
-            opacity: 0;
-            transform: translateY(30px);
-            visibility: hidden;
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-            will-change: opacity, visibility;
-        }
+    .experience-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      text-align: left;
+      padding: 18px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
+      cursor: pointer;
+    }
 
-        .fade-in-section.is-visible {
-            opacity: 1;
-            transform: none;
-            visibility: visible;
-        }
+    .experience-toggle .arrow {
+      transition: transform var(--transition);
+      opacity: 0.85;
+      font-size: 1.1rem;
+    }
 
-        /* АДАПТИВНОСТЬ */
-        @media (max-width: 768px) {
-            .hero-content h1 { font-size: 2.5rem; }
-            .about-grid, .contact-grid { grid-template-columns: 1fr; }
-            .experience-header { flex-direction: column; }
-            .job-duration { margin-top: 5px; }
-            .section { padding: 60px 0; }
-        }
-    </style>
+    .experience-toggle[aria-expanded="true"] .arrow {
+      transform: rotate(180deg);
+    }
+
+    .experience-panel {
+      display: grid;
+      gap: 14px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 420ms ease, opacity 320ms ease;
+    }
+
+    .experience-panel.open {
+      opacity: 1;
+    }
+
+    .experience-item {
+      display: grid;
+      gap: 8px;
+      padding: 18px 20px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+    }
+
+    .experience-item header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .experience-item time {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .experience-item ul, .project-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .projects-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .project-card .tag-row,
+    .skills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag, .skill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-size: 0.94rem;
+    }
+
+    .tag::before, .skill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.45);
+    }
+
+    .skills-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: start;
+    }
+
+    .skills-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .goal-box {
+      display: grid;
+      gap: 8px;
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      border: 1px solid color-mix(in srgb, var(--primary) 24%, var(--line));
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.10), rgba(96, 165, 250, 0.06));
+    }
+
+    .goal-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      transition: transform var(--transition), border-color var(--transition);
+    }
+
+    .contact-link:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+    }
+
+    .contact-link span {
+      color: var(--muted);
+      display: block;
+      font-size: 0.94rem;
+    }
+
+    .contact-link strong {
+      display: block;
+      margin-top: 4px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 14px 15px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font: inherit;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    input:focus, textarea:focus {
+      border-color: color-mix(in srgb, var(--primary) 48%, var(--line));
+      box-shadow: var(--focus);
+      background: rgba(255,255,255,0.06);
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .form-status {
+      min-height: 1.4em;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .form-status.error {
+      color: #fca5a5;
+    }
+
+    .form-status.success {
+      color: #86efac;
+    }
+
+    .footer {
+      padding: 18px 0 42px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid, .skills-grid, .contact-grid, .about-grid, .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-header {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .hero-main {
+        padding: 26px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 20px, var(--container));
+      }
+
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .brand {
+        justify-content: center;
+      }
+
+      .nav, .header-actions {
+        justify-content: center;
+      }
+
+      .hero {
+        padding-top: 26px;
+      }
+
+      .hero-main, .section-card {
+        padding: 20px;
+      }
+
+      .experience-toggle {
+        align-items: start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
-<body>
+<body data-theme="dark">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Перейти к началу страницы">
+        <span class="brand-mark">A</span>
+        <span>Алексей · Backend Portfolio</span>
+      </a>
 
-    <nav>
-        <div class="container nav-content">
-            <div class="logo">Aleksey<span>.Dev</span></div>
-            <a href="#contact" class="btn btn-outline js-scroll">Связаться</a>
-        </div>
-    </nav>
+      <div class="header-actions">
+        <nav class="nav" aria-label="Навигация по странице">
+          <a href="#about">Обо мне</a>
+          <a href="#experience">Опыт</a>
+          <a href="#projects">Проекты</a>
+          <a href="#contacts">Контакты</a>
+        </nav>
+        <button class="btn btn-secondary" id="themeToggle" type="button" aria-label="Переключить тему">Тема</button>
+      </div>
+    </div>
+  </header>
 
-    <header id="hero" class="hero">
-        <div class="container hero-content fade-in-section">
-            <h2>Привет, я Алексей 👋</h2>
-            <h1>Backend-разработчик</h1>
-            <p>Студент МГТУ «СТАНКИН» (Автоматизация технологических процессов и производств). Проектирую надежную архитектуру, работаю с базами данных и создаю эффективную серверную логику.</p>
-            <a href="#projects" class="btn js-scroll" style="margin-right: 15px;">Мои проекты</a>
-            <a href="#about" class="btn btn-outline js-scroll">Обо мне</a>
-        </div>
-    </header>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <article class="hero-main glass-card reveal">
+          <div class="eyebrow">Junior+/Middle портфолио · backend · Django</div>
+          <h1>Алексей</h1>
+          <p class="lead">
+            Студент МГТУ «СТАНКИН», направление автоматизация технологических процессов и производств.
+            Цель — backend-разработчик. Работаю с Django, Python и прикладной логикой для веб-продуктов.
+          </p>
+          <div class="hero-meta">
+            <span class="meta-pill">3+ года Django</span>
+            <span class="meta-pill">Backend · БД · API</span>
+            <span class="meta-pill">Web и desktop</span>
+          </div>
+        </article>
 
-    <section id="about" class="section">
-        <div class="container fade-in-section">
-            <h2 class="section-title">Обо мне</h2>
-            <div class="about-grid">
-                <div class="glass-card">
-                    <h3 style="margin-bottom: 15px; color: var(--accent);">Образование</h3>
-                    <p style="color: var(--text-muted);">
-                        <strong>МГТУ «СТАНКИН»</strong><br>
-                        Направление: Автоматизация технологических процессов и производств.<br><br>
-                        Академическая база позволяет мне системно подходить к решению задач, понимать низкоуровневые процессы и эффективно оптимизировать код.
-                    </p>
-                </div>
-                <div class="glass-card">
-                    <h3 style="margin-bottom: 15px; color: var(--accent);">Цель</h3>
-                    <p style="color: var(--text-muted);">
-                        Развитие в качестве <strong>Backend-разработчика</strong> уровня Middle. <br><br>
-                        Стремлюсь создавать масштабируемые веб-сервисы, углублять знания в архитектуре высоконагруженных систем и работать в сильной инженерной команде.
-                    </p>
-                </div>
-            </div>
-        </div>
+        <aside class="hero-side">
+          <div class="stat-card glass-card reveal">
+            <strong>3+</strong>
+            <span>года поддержки и развития интернет-магазина lightbikeshop.ru</span>
+          </div>
+          <div class="stat-card glass-card reveal">
+            <strong>7</strong>
+            <span>основных технологий в стеке: Python, Django, C#, C++, Qt, HTML, CSS, JavaScript</span>
+          </div>
+        </aside>
+      </div>
     </section>
 
-    <section id="skills" class="section">
-        <div class="container fade-in-section">
-            <h2 class="section-title">Технологии и навыки</h2>
-            <div class="skills-container">
-                <span class="skill-tag">Python</span>
-                <span class="skill-tag">Django</span>
-                <span class="skill-tag">C++</span>
-                <span class="skill-tag">Qt</span>
-                <span class="skill-tag">C#</span>
-                <span class="skill-tag">SQL / Базы данных</span>
-                <span class="skill-tag">JavaScript</span>
-                <span class="skill-tag">HTML5</span>
-                <span class="skill-tag">CSS3</span>
-                <span class="skill-tag">Git</span>
-            </div>
+    <section id="about">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Обо мне</h2>
+            <p>Фокус на backend-разработке, поддержке рабочих веб-систем и доведении задач до результата.</p>
+          </div>
         </div>
+        <div class="about-grid">
+          <article class="info-card">
+            <h3>Профиль</h3>
+            <p>Разрабатываю и поддерживаю веб-приложения на Django, работаю с серверной логикой, моделями данных, административной частью и бизнес-процессами.</p>
+          </article>
+          <article class="info-card">
+            <h3>Образование</h3>
+            <p>МГТУ «СТАНКИН», автоматизация технологических процессов и производств. Техническая база помогает быстро разбирать сложные системы и структуру данных.</p>
+          </article>
+          <article class="info-card">
+            <h3>Подход</h3>
+            <p>Пишу читаемый код, держу структуру проекта в порядке, ориентируюсь на практическую применимость и стабильность решения.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section id="experience" class="section">
-        <div class="container fade-in-section">
-            <h2 class="section-title">Опыт работы</h2>
-            <div class="glass-card">
-                <div class="experience-header">
-                    <div>
-                        <div class="job-title">Backend-разработчик</div>
-                        <div class="job-company">Интернет-магазин lightbikeshop.ru</div>
-                    </div>
-                    <div class="job-duration">Более 3 лет</div>
-                </div>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">
-                    Разработка и поддержка интернет-магазина на фреймворке Django. Работа с серверной логикой, проектирование и оптимизация взаимодействия с базой данных.
-                </p>
-                
-                <button class="btn btn-outline js-toggle-exp" style="padding: 8px 16px; font-size: 0.9rem;">
-                    Подробнее
-                </button>
-
-                <div class="experience-details" id="exp-details">
-                    <ul>
-                        <li>Проектирование и реализация архитектуры БД для каталога товаров, заказов и пользователей.</li>
-                        <li>Оптимизация ORM-запросов Django для ускорения загрузки страниц каталога.</li>
-                        <li>Интеграция сторонних API (платежные системы, службы доставки).</li>
-                        <li>Поддержка существующего кода, рефакторинг и исправление багов.</li>
-                    </ul>
-                    <div class="project-tech" style="margin-top: 10px;">
-                        <span class="tech-dot">Python</span>
-                        <span class="tech-dot">Django</span>
-                        <span class="tech-dot">PostgreSQL</span>
-                    </div>
-                </div>
-            </div>
+    <section id="experience">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Опыт</h2>
+            <p>Раскрывающийся блок показывает ключевую работу и технический вклад.</p>
+          </div>
         </div>
+
+        <button class="btn btn-primary experience-toggle" id="experienceToggle" type="button" aria-expanded="false" aria-controls="experiencePanel">
+          <span>Показать детали опыта</span>
+          <span class="arrow">⌄</span>
+        </button>
+
+        <div class="experience-panel" id="experiencePanel" aria-hidden="true">
+          <article class="experience-item">
+            <header>
+              <h3>lightbikeshop.ru — разработка и поддержка интернет-магазина</h3>
+              <time>3+ года</time>
+            </header>
+            <p>Работа над backend-частью Django-проекта с регулярной эксплуатационной поддержкой.</p>
+            <ul>
+              <li>Реализация и доработка бизнес-логики.</li>
+              <li>Работа с базой данных, моделями и связями.</li>
+              <li>Поддержка существующих функций и исправление багов.</li>
+              <li>Участие в улучшении структуры проекта и стабильности системы.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section id="projects" class="section">
-        <div class="container fade-in-section">
-            <h2 class="section-title">Проекты</h2>
-            <div class="projects-grid">
-                <div class="glass-card" style="display: flex; flex-direction: column;">
-                    <h3 class="project-title">Симулятор конвейера</h3>
-                    <p class="project-desc">
-                        Десктопное приложение для моделирования технологических процессов конвейерной ленты. Визуализация движения объектов, расчет пропускной способности и обработка прерываний в реальном времени.
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-dot">C++</span>
-                        <span class="tech-dot">Qt Framework</span>
-                    </div>
-                </div>
-                
-                <div class="glass-card" style="display: flex; flex-direction: column;">
-                    <h3 class="project-title">Django Web Services</h3>
-                    <p class="project-desc">
-                        Набор учебных и pet-проектов на Django: REST API для систем управления задачами, реализация JWT-аутентификации, парсеры данных с сохранением в реляционную БД.
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-dot">Python</span>
-                        <span class="tech-dot">Django REST Framework</span>
-                    </div>
-                </div>
-            </div>
+    <section id="projects">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Проекты</h2>
+            <p>Практические работы, в которых видны прикладные навыки и системное мышление.</p>
+          </div>
         </div>
+
+        <div class="projects-grid">
+          <article class="project-card">
+            <h3>Симулятор конвейера</h3>
+            <p>Курсовой проект на C++ и Qt. Модель последовательной работы механизма с интерфейсом и логикой управления.</p>
+            <ul>
+              <li>Работа с событийной логикой.</li>
+              <li>Интерфейс на Qt.</li>
+              <li>Структурирование состояния процесса.</li>
+            </ul>
+          </article>
+          <article class="project-card">
+            <h3>Веб-проекты на Django</h3>
+            <p>Серверные приложения и доработки, связанные с контентом, пользователями, товарами и внутренней бизнес-логикой.</p>
+            <ul>
+              <li>Модели, представления, формы.</li>
+              <li>Админ-панель и CRUD-сценарии.</li>
+              <li>Работа с шаблонами и данными.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section id="contact" class="section">
-        <div class="container fade-in-section">
-            <h2 class="section-title">Связаться со мной</h2>
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <p>Открыт к предложениям, обсуждению проектов и вакансиям на позицию Backend-разработчика.</p>
-                    <p>📧 <strong>Email:</strong> alexey.dev@example.com</p>
-                    <p>🐙 <strong>GitHub:</strong> github.com/yourusername</p>
-                    <p>✈️ <strong>Telegram:</strong> @yourtelegram</p>
-                </div>
-                
-                <div class="glass-card">
-                    <form id="contact-form">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Ваше имя" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email-input" class="form-control" placeholder="Ваш Email" required>
-                            <div id="email-error" class="form-error">Пожалуйста, введите корректный email</div>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" rows="4" placeholder="Сообщение" required></textarea>
-                        </div>
-                        <button type="submit" class="btn" style="width: 100%;">Отправить сообщение</button>
-                    </form>
-                </div>
-            </div>
+    <section id="skills">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Навыки</h2>
+            <p>Технологии оформлены как теги для быстрого сканирования стека.</p>
+          </div>
         </div>
+        <div class="skills-grid">
+          <div class="skills-panel">
+            <div class="skills-row" aria-label="Основные навыки">
+              <span class="skill">Python</span>
+              <span class="skill">Django</span>
+              <span class="skill">C#</span>
+              <span class="skill">C++</span>
+              <span class="skill">Qt</span>
+              <span class="skill">HTML</span>
+              <span class="skill">CSS</span>
+              <span class="skill">JavaScript</span>
+            </div>
+          </div>
+          <aside class="goal-box">
+            <h3>Цель</h3>
+            <p>Развиваться как backend-разработчик, усиливать архитектурное мышление, качество кода и глубину работы с Django, БД и серверной логикой.</p>
+          </aside>
+        </div>
+      </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; <span id="year"></span> Алексей. Создано с помощью HTML, CSS и Vanilla JS.</p>
+    <section id="contacts">
+      <div class="container section-card glass-card reveal">
+        <div class="section-header">
+          <div>
+            <h2>Контакты</h2>
+            <p>Связь и форма обратной связи. Кнопка ниже прокручивает к контакту.</p>
+          </div>
+          <button class="btn btn-secondary" id="scrollToContacts" type="button">К контактам</button>
         </div>
-    </footer>
 
-    <script>
-        // 1. Установка текущего года в подвале
-        document.getElementById('year').textContent = new Date().getFullYear();
+        <div class="contact-grid">
+          <div class="contact-list">
+            <a class="contact-link" href="mailto:alexey@example.com">
+              <div>
+                <span>Email</span>
+                <strong>alexey@example.com</strong>
+              </div>
+              <span>↗</span>
+            </a>
+            <a class="contact-link" href="https://github.com/" target="_blank" rel="noopener noreferrer">
+              <div>
+                <span>GitHub</span>
+                <strong>github.com/username</strong>
+              </div>
+              <span>↗</span>
+            </a>
+            <a class="contact-link" href="https://t.me/" target="_blank" rel="noopener noreferrer">
+              <div>
+                <span>Telegram</span>
+                <strong>@username</strong>
+              </div>
+              <span>↗</span>
+            </a>
+          </div>
 
-        // 2. Плавный скролл по якорным ссылкам
-        document.querySelectorAll('.js-scroll').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    // Учет высоты фиксированной навигации (прим. 70px)
-                    const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 70;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
+          <div class="form-card">
+            <h3>Форма</h3>
+            <p>Проверка email выполняется на клиенте перед отправкой.</p>
+            <form id="contactForm" novalidate>
+              <label>
+                Имя
+                <input type="text" name="name" placeholder="Ваше имя" required minlength="2" />
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" id="emailField" placeholder="name@example.com" required />
+              </label>
+              <label>
+                Сообщение
+                <textarea name="message" placeholder="Коротко о задаче или вакансии" required minlength="10"></textarea>
+              </label>
+              <button class="btn btn-primary" type="submit">Отправить</button>
+              <div class="form-status" id="formStatus" aria-live="polite"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">Алексей · backend-разработка · GitHub Pages-ready</div>
+  </footer>
+
+  <script>
+    // Переключение темы с сохранением выбора
+    const body = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('portfolio-theme');
+
+    if (savedTheme) {
+      body.setAttribute('data-theme', savedTheme);
+    } else {
+      body.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('portfolio-theme', nextTheme);
+    });
+
+    // Плавный переход к блоку контактов
+    document.getElementById('scrollToContacts').addEventListener('click', () => {
+      document.getElementById('contacts').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Раскрывающийся блок опыта с анимацией высоты
+    const experienceToggle = document.getElementById('experienceToggle');
+    const experiencePanel = document.getElementById('experiencePanel');
+
+    function setExperienceHeight(open) {
+      if (open) {
+        experiencePanel.classList.add('open');
+        experiencePanel.setAttribute('aria-hidden', 'false');
+        experiencePanel.style.maxHeight = experiencePanel.scrollHeight + 'px';
+      } else {
+        experiencePanel.style.maxHeight = experiencePanel.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+          experiencePanel.classList.remove('open');
+          experiencePanel.setAttribute('aria-hidden', 'true');
+          experiencePanel.style.maxHeight = '0px';
         });
+      }
+    }
 
-        // 3. Раскрытие деталей опыта работы
-        const toggleExpBtn = document.querySelector('.js-toggle-exp');
-        const expDetails = document.getElementById('exp-details');
+    experienceToggle.addEventListener('click', () => {
+      const isOpen = experienceToggle.getAttribute('aria-expanded') === 'true';
+      experienceToggle.setAttribute('aria-expanded', String(!isOpen));
+      setExperienceHeight(!isOpen);
+    });
 
-        if(toggleExpBtn && expDetails) {
-            toggleExpBtn.addEventListener('click', function() {
-                expDetails.classList.toggle('expanded');
-                if (expDetails.classList.contains('expanded')) {
-                    this.textContent = 'Скрыть';
-                } else {
-                    this.textContent = 'Подробнее';
-                }
-            });
+    window.addEventListener('resize', () => {
+      if (experienceToggle.getAttribute('aria-expanded') === 'true') {
+        experiencePanel.style.maxHeight = experiencePanel.scrollHeight + 'px';
+      }
+    });
+
+    // Появление секций при скролле
+    const revealItems = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
         }
+      });
+    }, { threshold: 0.12 });
 
-        // 4. Валидация Email и обработка формы
-        const form = document.getElementById('contact-form');
-        const emailInput = document.getElementById('email-input');
-        const emailError = document.getElementById('email-error');
+    revealItems.forEach((el) => revealObserver.observe(el));
 
-        // Простая регулярка для проверки формата email
-        const validateEmail = (email) => {
-            return String(email)
-                .toLowerCase()
-                .match(
-                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                );
-        };
+    // Валидация формы с проверкой email
+    const form = document.getElementById('contactForm');
+    const emailField = document.getElementById('emailField');
+    const formStatus = document.getElementById('formStatus');
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Предотвращаем перезагрузку страницы
-            
-            const emailValue = emailInput.value.trim();
-            
-            if (!validateEmail(emailValue)) {
-                emailError.style.display = 'block';
-                emailInput.style.borderColor = '#ef4444';
-            } else {
-                emailError.style.display = 'none';
-                emailInput.style.borderColor = 'var(--card-border)';
-                
-                // Имитация успешной отправки
-                const btn = form.querySelector('button[type="submit"]');
-                const originalText = btn.textContent;
-                btn.textContent = 'Отправлено!';
-                btn.style.background = '#10b981'; // Green color
-                
-                form.reset();
-                
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = 'var(--accent)';
-                }, 3000);
-            }
-        });
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    }
 
-        emailInput.addEventListener('input', function() {
-            // Убираем ошибку при наборе текста
-            if (emailError.style.display === 'block') {
-                emailError.style.display = 'none';
-                emailInput.style.borderColor = 'var(--accent)';
-            }
-        });
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
 
-        // 5. Анимация появления секций при скролле (Intersection Observer)
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.15 // Срабатывает, когда видно 15% элемента
-        };
+      const name = form.name.value.trim();
+      const email = emailField.value.trim();
+      const message = form.message.value.trim();
 
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    // Прекращаем наблюдение после первого появления для оптимизации
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
+      if (name.length < 2) {
+        formStatus.textContent = 'Введите имя минимум из 2 символов.';
+        formStatus.className = 'form-status error';
+        form.name.focus();
+        return;
+      }
 
-        document.querySelectorAll('.fade-in-section').forEach(section => {
-            observer.observe(section);
-        });
-    </script>
+      if (!isValidEmail(email)) {
+        formStatus.textContent = 'Введите корректный email.';
+        formStatus.className = 'form-status error';
+        emailField.focus();
+        return;
+      }
+
+      if (message.length < 10) {
+        formStatus.textContent = 'Сообщение слишком короткое.';
+        formStatus.className = 'form-status error';
+        form.message.focus();
+        return;
+      }
+
+      formStatus.textContent = 'Форма прошла проверку. Сообщение готово к отправке.';
+      formStatus.className = 'form-status success';
+      form.reset();
+    });
+
+    // Если блок уже открыт к моменту ресайза/загрузки, выставляем корректную высоту
+    if (experienceToggle.getAttribute('aria-expanded') === 'true') {
+      experiencePanel.style.maxHeight = experiencePanel.scrollHeight + 'px';
+    }
+  </script>
 </body>
 </html>
