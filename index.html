@@ -1,1584 +1,649 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Алексей — Backend Developer</title>
-  <meta name="description" content="Резюме Алексея — студент МГТУ СТАНКИН, начинающий backend-разработчик." />
-
-  <!-- Google Fonts: Syne (display) + Fira Code (mono) + Outfit (body) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
-  <style>
-    /* ══════════════════════════════════════════════
-       CSS CUSTOM PROPERTIES
-    ══════════════════════════════════════════════ */
-    :root {
-      --bg:          #0b0d11;
-      --bg-card:     #13161d;
-      --bg-glass:    rgba(255,255,255,0.04);
-      --border:      rgba(255,255,255,0.07);
-      --text:        #e8eaf0;
-      --text-muted:  #7a8099;
-      --accent:      #4af2a1;   /* emerald-mint — default */
-      --accent-dim:  rgba(74,242,161,0.12);
-      --accent-glow: rgba(74,242,161,0.35);
-      --font-display: 'Syne', sans-serif;
-      --font-body:    'Outfit', sans-serif;
-      --font-mono:    'Fira Code', monospace;
-      --radius:       14px;
-      --radius-sm:    8px;
-      --transition:   0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    /* Accent themes (toggled via JS) */
-    [data-accent="cyan"] {
-      --accent:      #38d9f5;
-      --accent-dim:  rgba(56,217,245,0.12);
-      --accent-glow: rgba(56,217,245,0.35);
-    }
-    [data-accent="violet"] {
-      --accent:      #a78bfa;
-      --accent-dim:  rgba(167,139,250,0.12);
-      --accent-glow: rgba(167,139,250,0.35);
-    }
-    [data-accent="orange"] {
-      --accent:      #fb923c;
-      --accent-dim:  rgba(251,146,60,0.12);
-      --accent-glow: rgba(251,146,60,0.35);
-    }
-
-    /* ══════════════════════════════════════════════
-       RESET & BASE
-    ══════════════════════════════════════════════ */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html {
-      scroll-behavior: smooth;
-      font-size: 16px;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-weight: 400;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    /* Noise texture overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.6;
-    }
-
-    /* Gradient mesh background blobs */
-    .bg-blobs {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .bg-blobs span {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.18;
-      animation: blobDrift 20s ease-in-out infinite alternate;
-    }
-    .bg-blobs span:nth-child(1) {
-      width: 700px; height: 700px;
-      background: var(--accent);
-      top: -200px; left: -200px;
-      animation-duration: 22s;
-    }
-    .bg-blobs span:nth-child(2) {
-      width: 500px; height: 500px;
-      background: #4a6ff2;
-      bottom: -150px; right: -100px;
-      animation-duration: 18s;
-      animation-delay: -8s;
-    }
-    .bg-blobs span:nth-child(3) {
-      width: 350px; height: 350px;
-      background: var(--accent);
-      top: 40%; left: 55%;
-      animation-duration: 25s;
-      animation-delay: -4s;
-      opacity: 0.08;
-    }
-    @keyframes blobDrift {
-      0%   { transform: translate(0,0) scale(1); }
-      50%  { transform: translate(60px,-40px) scale(1.05); }
-      100% { transform: translate(-40px,60px) scale(0.95); }
-    }
-
-    /* Main content above blobs */
-    main, header, footer, nav { position: relative; z-index: 1; }
-
-    /* ══════════════════════════════════════════════
-       LAYOUT CONTAINER
-    ══════════════════════════════════════════════ */
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    section {
-      padding: 90px 0;
-    }
-
-    /* ══════════════════════════════════════════════
-       NAVIGATION
-    ══════════════════════════════════════════════ */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(11,13,17,0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      transition: var(--transition);
-    }
-
-    .nav-logo {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 1.1rem;
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color var(--transition);
-      letter-spacing: 0.05em;
-    }
-
-    .nav-links a:hover { color: var(--accent); }
-
-    /* Theme switcher button */
-    .theme-btn {
-      background: var(--bg-glass);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 6px 14px;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      cursor: pointer;
-      transition: var(--transition);
-      letter-spacing: 0.04em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .theme-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-    .theme-btn .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: inline-block;
-    }
-
-    /* Hamburger (mobile) */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 22px; height: 2px;
-      background: var(--text-muted);
-      border-radius: 2px;
-      transition: var(--transition);
-    }
-
-    /* ══════════════════════════════════════════════
-       SECTION HEADINGS
-    ══════════════════════════════════════════════ */
-    .section-label {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.8rem, 4vw, 2.4rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 48px;
-      color: var(--text);
-    }
-
-    /* Underline accent on title */
-    .section-title span {
-      color: var(--accent);
-    }
-
-    /* ══════════════════════════════════════════════
-       SCROLL-REVEAL ANIMATION
-    ══════════════════════════════════════════════ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Stagger children */
-    .stagger .reveal:nth-child(1) { transition-delay: 0.05s; }
-    .stagger .reveal:nth-child(2) { transition-delay: 0.12s; }
-    .stagger .reveal:nth-child(3) { transition-delay: 0.19s; }
-    .stagger .reveal:nth-child(4) { transition-delay: 0.26s; }
-    .stagger .reveal:nth-child(5) { transition-delay: 0.33s; }
-    .stagger .reveal:nth-child(6) { transition-delay: 0.40s; }
-
-    /* ══════════════════════════════════════════════
-       HERO SECTION
-    ══════════════════════════════════════════════ */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding-top: 80px;
-    }
-
-    .hero-inner {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 48px;
-      align-items: center;
-      width: 100%;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-glow);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--accent);
-      letter-spacing: 0.06em;
-      margin-bottom: 22px;
-    }
-
-    .hero-tag::before {
-      content: '';
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.5; transform: scale(0.8); }
-    }
-
-    .hero-name {
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 8vw, 5.5rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1.0;
-      margin-bottom: 16px;
-    }
-
-    .hero-name .accent-line {
-      display: block;
-      color: var(--accent);
-    }
-
-    .hero-role {
-      font-family: var(--font-mono);
-      font-size: clamp(0.85rem, 2vw, 1rem);
-      color: var(--text-muted);
-      margin-bottom: 28px;
-      letter-spacing: 0.02em;
-    }
-
-    .hero-role .caret {
-      display: inline-block;
-      color: var(--accent);
-      animation: blink 1s step-end infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 520px;
-      line-height: 1.8;
-      margin-bottom: 38px;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: var(--radius-sm);
-      padding: 12px 26px;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
-      text-decoration: none;
-      cursor: pointer;
-      border: none;
-      transition: var(--transition);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #0b0d11;
-      font-weight: 700;
-      box-shadow: 0 0 22px var(--accent-glow);
-    }
-    .btn-primary:hover {
-      filter: brightness(1.12);
-      box-shadow: 0 0 36px var(--accent-glow);
-      transform: translateY(-1px);
-    }
-
-    .btn-ghost {
-      background: var(--bg-glass);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateY(-1px);
-    }
-
-    /* Hero avatar placeholder — geometric */
-    .hero-avatar {
-      width: 200px; height: 200px;
-      border-radius: 50%;
-      background: var(--bg-card);
-      border: 2px solid var(--border);
-      position: relative;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .hero-avatar::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 50%;
-      background: conic-gradient(var(--accent) 0deg, transparent 120deg, transparent 240deg, var(--accent-glow) 360deg);
-      animation: spin 8s linear infinite;
-      z-index: -1;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .hero-avatar .initials {
-      font-family: var(--font-display);
-      font-size: 3.5rem;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    /* ══════════════════════════════════════════════
-       ABOUT SECTION
-    ══════════════════════════════════════════════ */
-    #about .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: start;
-    }
-
-    #about p {
-      font-size: 1rem;
-      color: var(--text-muted);
-      line-height: 1.85;
-      margin-bottom: 18px;
-    }
-
-    #about p strong {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .about-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px 26px;
-      transition: var(--transition);
-    }
-
-    .stat-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 24px var(--accent-dim);
-      transform: translateY(-2px);
-    }
-
-    .stat-number {
-      font-family: var(--font-display);
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--accent);
-      letter-spacing: -0.03em;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .stat-label {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      letter-spacing: 0.04em;
-    }
-
-    /* ══════════════════════════════════════════════
-       EXPERIENCE SECTION
-    ══════════════════════════════════════════════ */
-    .exp-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 20px;
-      overflow: hidden;
-      transition: border-color var(--transition);
-    }
-
-    .exp-card:hover { border-color: rgba(255,255,255,0.14); }
-
-    .exp-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 24px 28px;
-      cursor: pointer;
-      gap: 16px;
-      user-select: none;
-    }
-
-    .exp-header:hover .exp-company {
-      color: var(--accent);
-    }
-
-    .exp-meta { flex: 1; }
-
-    .exp-company {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text);
-      transition: color var(--transition);
-      margin-bottom: 4px;
-    }
-
-    .exp-position {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-    }
-
-    .exp-duration {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--accent);
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-glow);
-      padding: 5px 12px;
-      border-radius: 20px;
-      white-space: nowrap;
-      letter-spacing: 0.04em;
-    }
-
-    /* Arrow icon */
-    .exp-toggle {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: var(--bg-glass);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: var(--transition);
-    }
-
-    .exp-toggle svg {
-      transition: transform var(--transition);
-      color: var(--text-muted);
-    }
-
-    .exp-card.open .exp-toggle {
-      background: var(--accent-dim);
-      border-color: var(--accent-glow);
-    }
-    .exp-card.open .exp-toggle svg {
-      transform: rotate(180deg);
-      color: var(--accent);
-    }
-
-    /* Collapsible body */
-    .exp-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    .exp-body-inner {
-      padding: 0 28px 28px;
-      border-top: 1px solid var(--border);
-      padding-top: 22px;
-    }
-
-    .exp-body-inner ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .exp-body-inner li {
-      display: flex;
-      gap: 12px;
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.65;
-    }
-
-    .exp-body-inner li::before {
-      content: '▸';
-      color: var(--accent);
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    /* ══════════════════════════════════════════════
-       PROJECTS SECTION
-    ══════════════════════════════════════════════ */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
-    }
-
-    .project-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 0% 0%, var(--accent-dim), transparent 70%);
-      opacity: 0;
-      transition: opacity var(--transition);
-    }
-
-    .project-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 40px var(--accent-dim);
-    }
-
-    .project-card:hover::before { opacity: 1; }
-
-    .project-icon {
-      font-size: 1.8rem;
-      line-height: 1;
-    }
-
-    .project-name {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.02em;
-    }
-
-    .project-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      flex: 1;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .tag {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: var(--accent);
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-glow);
-      padding: 4px 10px;
-      border-radius: 4px;
-      letter-spacing: 0.04em;
-    }
-
-    /* ══════════════════════════════════════════════
-       SKILLS SECTION
-    ══════════════════════════════════════════════ */
-    .skills-categories {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    .skill-group h3 {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .skill-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 9px 16px;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--text);
-      letter-spacing: 0.02em;
-      transition: var(--transition);
-      cursor: default;
-    }
-
-    .skill-badge:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-dim);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
-
-    .skill-badge .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      opacity: 0.6;
-    }
-
-    /* ══════════════════════════════════════════════
-       GOAL SECTION
-    ══════════════════════════════════════════════ */
-    #goal {
-      padding: 80px 0;
-    }
-
-    .goal-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 48px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .goal-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, var(--accent-dim), transparent 60%);
-    }
-
-    .goal-card > * { position: relative; }
-
-    .goal-card .label {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--accent);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .goal-card .goal-text {
-      font-family: var(--font-display);
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-      max-width: 600px;
-      margin: 0 auto 24px;
-    }
-
-    .goal-card .goal-text span { color: var(--accent); }
-
-    .goal-card .goal-sub {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.8;
-    }
-
-    /* ══════════════════════════════════════════════
-       CONTACTS SECTION
-    ══════════════════════════════════════════════ */
-    #contacts {
-      padding-bottom: 100px;
-    }
-
-    .contacts-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: start;
-    }
-
-    .contact-links {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .contact-link {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px 20px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      text-decoration: none;
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      transition: var(--transition);
-    }
-
-    .contact-link:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: translateX(4px);
-    }
-
-    .contact-link .icon {
-      width: 34px; height: 34px;
-      border-radius: var(--radius-sm);
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-glow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 1rem;
-    }
-
-    /* Contact Form */
-    .contact-form {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-    }
-
-    .contact-form h3 {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-      color: var(--text);
-    }
-
-    .form-group {
-      margin-bottom: 18px;
-    }
-
-    .form-group label {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 12px 16px;
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 0.92rem;
-      outline: none;
-      transition: var(--transition);
-      resize: none;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-dim);
-    }
-
-    .form-group input.error,
-    .form-group textarea.error {
-      border-color: #f87171;
-      box-shadow: 0 0 0 3px rgba(248,113,113,0.15);
-    }
-
-    .form-error-msg {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: #f87171;
-      margin-top: 5px;
-      display: none;
-    }
-
-    .form-group.has-error .form-error-msg { display: block; }
-
-    .form-success {
-      display: none;
-      text-align: center;
-      padding: 20px;
-      color: var(--accent);
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-    }
-
-    /* ══════════════════════════════════════════════
-       FOOTER
-    ══════════════════════════════════════════════ */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 28px 24px;
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-    }
-
-    footer span { color: var(--accent); }
-
-    /* ══════════════════════════════════════════════
-       SCROLLBAR
-    ══════════════════════════════════════════════ */
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent);
-      border-radius: 4px;
-      opacity: 0.6;
-    }
-
-    /* ══════════════════════════════════════════════
-       RESPONSIVE — TABLET (≤800px)
-    ══════════════════════════════════════════════ */
-    @media (max-width: 800px) {
-      .hero-inner {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-
-      .hero-avatar { margin: 0 auto; }
-
-      .hero-cta { justify-content: center; }
-
-      .hero-desc { margin: 0 auto 38px; }
-
-      .hero-tag { justify-content: center; }
-
-      #about .about-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .contacts-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%; left: 0; right: 0;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 20px 24px;
-        background: rgba(11,13,17,0.97);
-        border-bottom: 1px solid var(--border);
-        gap: 18px;
-      }
-
-      .nav-links.open { display: flex; }
-
-      .hamburger { display: flex; }
-    }
-
-    /* ══════════════════════════════════════════════
-       RESPONSIVE — MOBILE (≤480px)
-    ══════════════════════════════════════════════ */
-    @media (max-width: 480px) {
-      section { padding: 70px 0; }
-
-      .hero-avatar { width: 150px; height: 150px; }
-
-      .goal-card { padding: 32px 24px; }
-
-      .contact-form { padding: 24px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Алексей | Backend-разработчик</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS ПЕРЕМЕННЫЕ */
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(12px);
+            --transition: all 0.3s ease;
+        }
+
+        /* БАЗОВЫЕ НАСТРОЙКИ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            /* Декоративный градиентный фон */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+            background-attachment: fixed;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--accent);
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--text-main);
+        }
+
+        /* УТИЛИТЫ */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-block;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* СТЕКЛЯННАЯ КАРТОЧКА */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* КНОПКИ */
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px var(--accent);
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+        }
+
+        /* НАВИГАЦИЯ */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        /* ГЛАВНЫЙ ЭКРАН (HERO) */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px; /* offset for nav */
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .hero-content h2 {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        /* ОБО МНЕ & ЦЕЛЬ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        /* НАВЫКИ */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .skill-tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .skill-tag:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* ОПЫТ РАБОТЫ */
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .job-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .job-company {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .job-duration {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Раскрывающиеся детали опыта */
+        .experience-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+            opacity: 0;
+        }
+
+        .experience-details.expanded {
+            max-height: 500px; /* Произвольное большое значение для анимации */
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 1;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .experience-details ul {
+            list-style-position: inside;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .experience-details li {
+            margin-bottom: 8px;
+        }
+
+        /* ПРОЕКТЫ */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .project-desc {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .tech-dot {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        /* КОНТАКТЫ & ФОРМА */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .form-error {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* АНИМАЦИИ ПОЯВЛЕНИЯ (SCROLL) */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            visibility: hidden;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, visibility;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+            visibility: visible;
+        }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .about-grid, .contact-grid { grid-template-columns: 1fr; }
+            .experience-header { flex-direction: column; }
+            .job-duration { margin-top: 5px; }
+            .section { padding: 60px 0; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Background gradient blobs -->
-  <div class="bg-blobs" aria-hidden="true">
-    <span></span><span></span><span></span>
-  </div>
-
-  <!-- ═══════════════════════════════════════
-       NAVIGATION
-  ═══════════════════════════════════════ -->
-  <nav id="navbar" aria-label="Main navigation">
-    <a href="#hero" class="nav-logo">aleksey.dev</a>
-
-    <ul class="nav-links" id="navLinks" role="list">
-      <li><a href="#about">Обо мне</a></li>
-      <li><a href="#experience">Опыт</a></li>
-      <li><a href="#projects">Проекты</a></li>
-      <li><a href="#skills">Навыки</a></li>
-      <li><a href="#contacts">Контакты</a></li>
-    </ul>
-
-    <div style="display:flex; gap:10px; align-items:center;">
-      <!-- Accent color switcher -->
-      <button class="theme-btn" id="accentBtn" aria-label="Сменить акцентный цвет">
-        <span class="dot"></span>акцент
-      </button>
-      <!-- Hamburger for mobile -->
-      <button class="hamburger" id="hamburger" aria-label="Меню" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <main>
-
-    <!-- ═══════════════════════════════════════
-         HERO
-    ═══════════════════════════════════════ -->
-    <section id="hero">
-      <div class="container">
-        <div class="hero-inner">
-          <div>
-            <!-- Availability badge -->
-            <div class="hero-tag">Открыт к предложениям</div>
-
-            <h1 class="hero-name">
-              Алексей<br />
-              <span class="accent-line">Беликов</span>
-            </h1>
-
-            <p class="hero-role">
-              &lt; Backend Developer
-              <span class="caret">_</span>
-              &gt;
-            </p>
-
-            <p class="hero-desc">
-              Студент МГТУ «СТАНКИН», направление автоматизации технологических
-              процессов. Строю серверную логику на Python и Django, работаю с базами
-              данных и системами автоматизации.
-            </p>
-
-            <div class="hero-cta">
-              <a href="#contacts" class="btn btn-primary">
-                <!-- Arrow icon -->
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.81 19.79 19.79 0 01.22 2.18 2 2 0 012.22 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
-                Связаться
-              </a>
-              <a href="#projects" class="btn btn-ghost">
-                Посмотреть проекты →
-              </a>
-            </div>
-          </div>
-
-          <!-- Avatar with spinning border -->
-          <div class="hero-avatar" aria-hidden="true">
-            <span class="initials">AB</span>
-          </div>
+    <nav>
+        <div class="container nav-content">
+            <div class="logo">Aleksey<span>.Dev</span></div>
+            <a href="#contact" class="btn btn-outline js-scroll">Связаться</a>
         </div>
-      </div>
-    </section>
+    </nav>
 
-    <!-- ═══════════════════════════════════════
-         ABOUT
-    ═══════════════════════════════════════ -->
-    <section id="about">
-      <div class="container">
-        <p class="section-label reveal">/ об меня</p>
-        <h2 class="section-title reveal">Немного <span>обо мне</span></h2>
-
-        <div class="about-grid stagger">
-          <div class="reveal">
-            <p>
-              Меня зовут <strong>Алексей Белов</strong>. Я студент факультета
-              автоматизации технологических процессов и производств
-              МГТУ <strong>«СТАНКИН»</strong>.
-            </p>
-            <p>
-              Более трёх лет занимаюсь разработкой и поддержкой коммерческого
-              интернет-магазина <strong>lightbikeshop.ru</strong>: пишу бэкенд на Django,
-              проектирую схемы баз данных, оптимизирую запросы и реализую
-              бизнес-логику от обработки заказов до интеграции с платёжными системами.
-            </p>
-            <p>
-              Помимо веба, мне интересны системное программирование и автоматизация —
-              разрабатываю инструменты на <strong>C++ / Qt</strong>, изучаю C#.
-              Стремлюсь к позиции backend-разработчика Python / Django в продуктовой
-              или сервисной компании.
-            </p>
-          </div>
-
-          <div class="about-stats reveal">
-            <div class="stat-card">
-              <div class="stat-number">3+</div>
-              <div class="stat-label">года коммерческой разработки</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">Django</div>
-              <div class="stat-label">основной фреймворк</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">МГТУ</div>
-              <div class="stat-label">«СТАНКИН», АТП и П</div>
-            </div>
-          </div>
+    <header id="hero" class="hero">
+        <div class="container hero-content fade-in-section">
+            <h2>Привет, я Алексей 👋</h2>
+            <h1>Backend-разработчик</h1>
+            <p>Студент МГТУ «СТАНКИН» (Автоматизация технологических процессов и производств). Проектирую надежную архитектуру, работаю с базами данных и создаю эффективную серверную логику.</p>
+            <a href="#projects" class="btn js-scroll" style="margin-right: 15px;">Мои проекты</a>
+            <a href="#about" class="btn btn-outline js-scroll">Обо мне</a>
         </div>
-      </div>
-    </section>
+    </header>
 
-    <!-- ═══════════════════════════════════════
-         EXPERIENCE
-    ═══════════════════════════════════════ -->
-    <section id="experience">
-      <div class="container">
-        <p class="section-label reveal">/ опыт</p>
-        <h2 class="section-title reveal">Где я <span>работал</span></h2>
-
-        <div class="stagger">
-
-          <!-- Experience card 1 -->
-          <article class="exp-card reveal" id="exp1">
-            <div class="exp-header" role="button" aria-expanded="false" aria-controls="exp1-body" tabindex="0">
-              <div class="exp-meta">
-                <div class="exp-company">lightbikeshop.ru</div>
-                <div class="exp-position">Backend Developer · Django</div>
-              </div>
-              <span class="exp-duration">2022 — наст. вр.</span>
-              <div class="exp-toggle" aria-hidden="true">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-            </div>
-            <div class="exp-body" id="exp1-body" role="region">
-              <div class="exp-body-inner">
-                <ul>
-                  <li>Разработка и поддержка интернет-магазина велосипедной тематики на Django: каталог, корзина, оформление заказов.</li>
-                  <li>Проектирование и оптимизация схемы PostgreSQL, написание сложных ORM-запросов и сырого SQL.</li>
-                  <li>Реализация REST API для мобильного клиента и административной панели управления ассортиментом.</li>
-                  <li>Интеграция с платёжными шлюзами и сервисами доставки.</li>
-                  <li>Деплой на VPS через Nginx + Gunicorn, настройка CI/CD пайплайна.</li>
-                </ul>
-              </div>
-            </div>
-          </article>
-
-          <!-- Experience card 2 -->
-          <article class="exp-card reveal" id="exp2">
-            <div class="exp-header" role="button" aria-expanded="false" aria-controls="exp2-body" tabindex="0">
-              <div class="exp-meta">
-                <div class="exp-company">МГТУ «СТАНКИН»</div>
-                <div class="exp-position">Студент · Автоматизация ТПП</div>
-              </div>
-              <span class="exp-duration">2021 — наст. вр.</span>
-              <div class="exp-toggle" aria-hidden="true">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-            </div>
-            <div class="exp-body" id="exp2-body" role="region">
-              <div class="exp-body-inner">
-                <ul>
-                  <li>Изучение принципов автоматизации производственных процессов, программирования ПЛК.</li>
-                  <li>Учебные проекты на C++, C# и Python в рамках курсов по алгоритмам и системному ПО.</li>
-                  <li>Курсовой проект: симулятор конвейерной линии на C++ / Qt с GUI и настройкой параметров.</li>
-                </ul>
-              </div>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════
-         PROJECTS
-    ═══════════════════════════════════════ -->
-    <section id="projects">
-      <div class="container">
-        <p class="section-label reveal">/ проекты</p>
-        <h2 class="section-title reveal">Что я <span>строил</span></h2>
-
-        <div class="projects-grid stagger">
-
-          <article class="project-card reveal">
-            <div class="project-icon">🛒</div>
-            <div class="project-name">lightbikeshop.ru</div>
-            <p class="project-desc">
-              Полнофункциональный коммерческий интернет-магазин велосипедов и
-              аксессуаров. Каталог с фильтрацией, корзина, оформление заказов,
-              личный кабинет, административная панель.
-            </p>
-            <div class="project-tags">
-              <span class="tag">Python</span>
-              <span class="tag">Django</span>
-              <span class="tag">PostgreSQL</span>
-              <span class="tag">Nginx</span>
-              <span class="tag">REST API</span>
-            </div>
-          </article>
-
-          <article class="project-card reveal">
-            <div class="project-icon">⚙️</div>
-            <div class="project-name">Симулятор конвейера</div>
-            <p class="project-desc">
-              Курсовой проект — десктопное приложение, симулирующее работу
-              конвейерной производственной линии с настраиваемыми параметрами,
-              статистикой и визуализацией в реальном времени.
-            </p>
-            <div class="project-tags">
-              <span class="tag">C++</span>
-              <span class="tag">Qt</span>
-              <span class="tag">OOP</span>
-            </div>
-          </article>
-
-          <article class="project-card reveal">
-            <div class="project-icon">🌐</div>
-            <div class="project-name">Django REST Projects</div>
-            <p class="project-desc">
-              Серия учебных и pet-проектов: REST API на Django REST Framework,
-              аутентификация по JWT, написание тестов с pytest-django,
-              документация через drf-spectacular.
-            </p>
-            <div class="project-tags">
-              <span class="tag">DRF</span>
-              <span class="tag">JWT</span>
-              <span class="tag">pytest</span>
-              <span class="tag">Docker</span>
-            </div>
-          </article>
-
-          <article class="project-card reveal">
-            <div class="project-icon">🤖</div>
-            <div class="project-name">Утилиты автоматизации</div>
-            <p class="project-desc">
-              Скрипты для автоматизации рутинных задач: парсеры, генераторы
-              прайс-листов, интеграции с API поставщиков — снизили ручную
-              работу на 80%.
-            </p>
-            <div class="project-tags">
-              <span class="tag">Python</span>
-              <span class="tag">Selenium</span>
-              <span class="tag">aiohttp</span>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════
-         SKILLS
-    ═══════════════════════════════════════ -->
-    <section id="skills">
-      <div class="container">
-        <p class="section-label reveal">/ навыки</p>
-        <h2 class="section-title reveal">Мой <span>стек</span></h2>
-
-        <div class="skills-categories stagger">
-
-          <div class="skill-group reveal">
-            <h3>Backend</h3>
-            <div class="skills-list">
-              <span class="skill-badge"><span class="dot"></span>Python</span>
-              <span class="skill-badge"><span class="dot"></span>Django</span>
-              <span class="skill-badge"><span class="dot"></span>Django REST Framework</span>
-              <span class="skill-badge"><span class="dot"></span>PostgreSQL</span>
-              <span class="skill-badge"><span class="dot"></span>SQLite</span>
-              <span class="skill-badge"><span class="dot"></span>Redis</span>
-              <span class="skill-badge"><span class="dot"></span>Celery</span>
-            </div>
-          </div>
-
-          <div class="skill-group reveal">
-            <h3>Системное программирование</h3>
-            <div class="skills-list">
-              <span class="skill-badge"><span class="dot"></span>C++</span>
-              <span class="skill-badge"><span class="dot"></span>Qt Framework</span>
-              <span class="skill-badge"><span class="dot"></span>C#</span>
-              <span class="skill-badge"><span class="dot"></span>OOP</span>
-            </div>
-          </div>
-
-          <div class="skill-group reveal">
-            <h3>Frontend & DevOps</h3>
-            <div class="skills-list">
-              <span class="skill-badge"><span class="dot"></span>HTML5</span>
-              <span class="skill-badge"><span class="dot"></span>CSS3</span>
-              <span class="skill-badge"><span class="dot"></span>JavaScript</span>
-              <span class="skill-badge"><span class="dot"></span>Git</span>
-              <span class="skill-badge"><span class="dot"></span>Docker</span>
-              <span class="skill-badge"><span class="dot"></span>Nginx</span>
-              <span class="skill-badge"><span class="dot"></span>Linux</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════
-         GOAL
-    ═══════════════════════════════════════ -->
-    <section id="goal">
-      <div class="container">
-        <div class="goal-card reveal">
-          <p class="label">/ моя цель</p>
-          <p class="goal-text">
-            Хочу расти как <span>Backend Developer</span> в команде,
-            где ценят качество кода и системное мышление
-          </p>
-          <p class="goal-sub">
-            Ищу позицию Junior+/Middle Python Backend Developer.
-            Готов к работе с микросервисами, высоконагруженными системами
-            и интересными продуктовыми задачами. Открыт к удалённой работе
-            и гибридному формату.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════
-         CONTACTS
-    ═══════════════════════════════════════ -->
-    <section id="contacts">
-      <div class="container">
-        <p class="section-label reveal">/ контакты</p>
-        <h2 class="section-title reveal">Давайте <span>пообщаемся</span></h2>
-
-        <div class="contacts-grid stagger">
-
-          <!-- Left — links -->
-          <div class="reveal">
-            <div class="contact-links">
-              <a href="mailto:aleksey@example.com" class="contact-link">
-                <div class="icon">✉️</div>
-                aleksey@example.com
-              </a>
-              <a href="https://t.me/aleksey_dev" target="_blank" rel="noopener noreferrer" class="contact-link">
-                <div class="icon">✈️</div>
-                @aleksey_dev · Telegram
-              </a>
-              <a href="https://github.com/aleksey-dev" target="_blank" rel="noopener noreferrer" class="contact-link">
-                <div class="icon" style="font-size:1.1rem;">⌥</div>
-                github.com/aleksey-dev
-              </a>
-              <a href="https://hh.ru" target="_blank" rel="noopener noreferrer" class="contact-link">
-                <div class="icon">📄</div>
-                Резюме на hh.ru
-              </a>
-            </div>
-
-            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.7;">
-              Москва · Готов к удалённой работе<br />
-              Время ответа — обычно в течение дня.
-            </p>
-          </div>
-
-          <!-- Right — form -->
-          <div class="reveal">
-            <div class="contact-form">
-              <h3>Написать напрямую</h3>
-
-              <!-- Form (frontend-only, отправка — placeholder) -->
-              <form id="contactForm" novalidate>
-
-                <div class="form-group" id="nameGroup">
-                  <label for="formName">Ваше имя</label>
-                  <input type="text" id="formName" placeholder="Иван Иванов" autocomplete="name" />
-                  <span class="form-error-msg">Введите ваше имя</span>
+    <section id="about" class="section">
+        <div class="container fade-in-section">
+            <h2 class="section-title">Обо мне</h2>
+            <div class="about-grid">
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 15px; color: var(--accent);">Образование</h3>
+                    <p style="color: var(--text-muted);">
+                        <strong>МГТУ «СТАНКИН»</strong><br>
+                        Направление: Автоматизация технологических процессов и производств.<br><br>
+                        Академическая база позволяет мне системно подходить к решению задач, понимать низкоуровневые процессы и эффективно оптимизировать код.
+                    </p>
                 </div>
-
-                <div class="form-group" id="emailGroup">
-                  <label for="formEmail">Email</label>
-                  <input type="email" id="formEmail" placeholder="ivan@company.ru" autocomplete="email" />
-                  <span class="form-error-msg">Введите корректный email</span>
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 15px; color: var(--accent);">Цель</h3>
+                    <p style="color: var(--text-muted);">
+                        Развитие в качестве <strong>Backend-разработчика</strong> уровня Middle. <br><br>
+                        Стремлюсь создавать масштабируемые веб-сервисы, углублять знания в архитектуре высоконагруженных систем и работать в сильной инженерной команде.
+                    </p>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="form-group" id="messageGroup">
-                  <label for="formMessage">Сообщение</label>
-                  <textarea id="formMessage" rows="4" placeholder="Привет, есть интересный проект..."></textarea>
-                  <span class="form-error-msg">Введите сообщение</span>
+    <section id="skills" class="section">
+        <div class="container fade-in-section">
+            <h2 class="section-title">Технологии и навыки</h2>
+            <div class="skills-container">
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">Django</span>
+                <span class="skill-tag">C++</span>
+                <span class="skill-tag">Qt</span>
+                <span class="skill-tag">C#</span>
+                <span class="skill-tag">SQL / Базы данных</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">HTML5</span>
+                <span class="skill-tag">CSS3</span>
+                <span class="skill-tag">Git</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="section">
+        <div class="container fade-in-section">
+            <h2 class="section-title">Опыт работы</h2>
+            <div class="glass-card">
+                <div class="experience-header">
+                    <div>
+                        <div class="job-title">Backend-разработчик</div>
+                        <div class="job-company">Интернет-магазин lightbikeshop.ru</div>
+                    </div>
+                    <div class="job-duration">Более 3 лет</div>
                 </div>
-
-                <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
-                  Отправить →
+                <p style="color: var(--text-muted); margin-bottom: 15px;">
+                    Разработка и поддержка интернет-магазина на фреймворке Django. Работа с серверной логикой, проектирование и оптимизация взаимодействия с базой данных.
+                </p>
+                
+                <button class="btn btn-outline js-toggle-exp" style="padding: 8px 16px; font-size: 0.9rem;">
+                    Подробнее
                 </button>
 
-              </form>
-
-              <div class="form-success" id="formSuccess">
-                ✓ Сообщение отправлено! Свяжусь с вами в ближайшее время.
-              </div>
-
+                <div class="experience-details" id="exp-details">
+                    <ul>
+                        <li>Проектирование и реализация архитектуры БД для каталога товаров, заказов и пользователей.</li>
+                        <li>Оптимизация ORM-запросов Django для ускорения загрузки страниц каталога.</li>
+                        <li>Интеграция сторонних API (платежные системы, службы доставки).</li>
+                        <li>Поддержка существующего кода, рефакторинг и исправление багов.</li>
+                    </ul>
+                    <div class="project-tech" style="margin-top: 10px;">
+                        <span class="tech-dot">Python</span>
+                        <span class="tech-dot">Django</span>
+                        <span class="tech-dot">PostgreSQL</span>
+                    </div>
+                </div>
             </div>
-          </div>
-
         </div>
-      </div>
     </section>
 
-  </main>
+    <section id="projects" class="section">
+        <div class="container fade-in-section">
+            <h2 class="section-title">Проекты</h2>
+            <div class="projects-grid">
+                <div class="glass-card" style="display: flex; flex-direction: column;">
+                    <h3 class="project-title">Симулятор конвейера</h3>
+                    <p class="project-desc">
+                        Десктопное приложение для моделирования технологических процессов конвейерной ленты. Визуализация движения объектов, расчет пропускной способности и обработка прерываний в реальном времени.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-dot">C++</span>
+                        <span class="tech-dot">Qt Framework</span>
+                    </div>
+                </div>
+                
+                <div class="glass-card" style="display: flex; flex-direction: column;">
+                    <h3 class="project-title">Django Web Services</h3>
+                    <p class="project-desc">
+                        Набор учебных и pet-проектов на Django: REST API для систем управления задачами, реализация JWT-аутентификации, парсеры данных с сохранением в реляционную БД.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-dot">Python</span>
+                        <span class="tech-dot">Django REST Framework</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- ═══════════════════════════════════════
-       FOOTER
-  ═══════════════════════════════════════ -->
-  <footer>
-    <p>Разработано с <span>♥</span> · Алексей Белов · <span id="year"></span></p>
-  </footer>
+    <section id="contact" class="section">
+        <div class="container fade-in-section">
+            <h2 class="section-title">Связаться со мной</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <p>Открыт к предложениям, обсуждению проектов и вакансиям на позицию Backend-разработчика.</p>
+                    <p>📧 <strong>Email:</strong> alexey.dev@example.com</p>
+                    <p>🐙 <strong>GitHub:</strong> github.com/yourusername</p>
+                    <p>✈️ <strong>Telegram:</strong> @yourtelegram</p>
+                </div>
+                
+                <div class="glass-card">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Ваше имя" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email-input" class="form-control" placeholder="Ваш Email" required>
+                            <div id="email-error" class="form-error">Пожалуйста, введите корректный email</div>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="4" placeholder="Сообщение" required></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Отправить сообщение</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="year"></span> Алексей. Создано с помощью HTML, CSS и Vanilla JS.</p>
+        </div>
+    </footer>
 
-  <!-- ═══════════════════════════════════════
-       JAVASCRIPT
-  ═══════════════════════════════════════ -->
-  <script>
-    /* ── 1. Current year in footer ─────────────────────── */
-    document.getElementById('year').textContent = new Date().getFullYear();
+    <script>
+        // 1. Установка текущего года в подвале
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-    /* ── 2. Mobile hamburger menu ───────────────────────── */
-    const hamburger = document.getElementById('hamburger');
-    const navLinks  = document.getElementById('navLinks');
+        // 2. Плавный скролл по якорным ссылкам
+        document.querySelectorAll('.js-scroll').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // Учет высоты фиксированной навигации (прим. 70px)
+                    const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 70;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
 
-    hamburger.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      hamburger.setAttribute('aria-expanded', isOpen);
-    });
+        // 3. Раскрытие деталей опыта работы
+        const toggleExpBtn = document.querySelector('.js-toggle-exp');
+        const expDetails = document.getElementById('exp-details');
 
-    // Close nav when a link is clicked
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', false);
-      });
-    });
-
-    /* ── 3. Experience accordion (expandable cards) ─────── */
-    document.querySelectorAll('.exp-header').forEach(header => {
-      const card = header.closest('.exp-card');
-      const body = card.querySelector('.exp-body');
-
-      // Toggle on click or Enter/Space keyboard press
-      const toggle = () => {
-        const isOpen = card.classList.toggle('open');
-        header.setAttribute('aria-expanded', isOpen);
-
-        if (isOpen) {
-          // Measure scrollHeight to animate max-height smoothly
-          body.style.maxHeight = body.scrollHeight + 'px';
-        } else {
-          body.style.maxHeight = '0';
+        if(toggleExpBtn && expDetails) {
+            toggleExpBtn.addEventListener('click', function() {
+                expDetails.classList.toggle('expanded');
+                if (expDetails.classList.contains('expanded')) {
+                    this.textContent = 'Скрыть';
+                } else {
+                    this.textContent = 'Подробнее';
+                }
+            });
         }
-      };
 
-      header.addEventListener('click', toggle);
-      header.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
-      });
-    });
+        // 4. Валидация Email и обработка формы
+        const form = document.getElementById('contact-form');
+        const emailInput = document.getElementById('email-input');
+        const emailError = document.getElementById('email-error');
 
-    /* ── 4. Scroll-reveal via IntersectionObserver ──────── */
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target); // fire once
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        // Простая регулярка для проверки формата email
+        const validateEmail = (email) => {
+            return String(email)
+                .toLowerCase()
+                .match(
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+        };
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Предотвращаем перезагрузку страницы
+            
+            const emailValue = emailInput.value.trim();
+            
+            if (!validateEmail(emailValue)) {
+                emailError.style.display = 'block';
+                emailInput.style.borderColor = '#ef4444';
+            } else {
+                emailError.style.display = 'none';
+                emailInput.style.borderColor = 'var(--card-border)';
+                
+                // Имитация успешной отправки
+                const btn = form.querySelector('button[type="submit"]');
+                const originalText = btn.textContent;
+                btn.textContent = 'Отправлено!';
+                btn.style.background = '#10b981'; // Green color
+                
+                form.reset();
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'var(--accent)';
+                }, 3000);
+            }
+        });
 
-    /* ── 5. Accent color switcher ───────────────────────── */
-    const accents = ['green', 'cyan', 'violet', 'orange'];
-    let accentIndex = 0;
+        emailInput.addEventListener('input', function() {
+            // Убираем ошибку при наборе текста
+            if (emailError.style.display === 'block') {
+                emailError.style.display = 'none';
+                emailInput.style.borderColor = 'var(--accent)';
+            }
+        });
 
-    document.getElementById('accentBtn').addEventListener('click', () => {
-      accentIndex = (accentIndex + 1) % accents.length;
-      const next = accents[accentIndex];
-      document.documentElement.setAttribute('data-accent', next === 'green' ? '' : next);
-    });
+        // 5. Анимация появления секций при скролле (Intersection Observer)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15 // Срабатывает, когда видно 15% элемента
+        };
 
-    /* ── 6. Contact form validation ─────────────────────── */
-    const form = document.getElementById('contactForm');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Прекращаем наблюдение после первого появления для оптимизации
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
 
-    const setValid   = (group) => { group.classList.remove('has-error'); group.querySelector('input,textarea').classList.remove('error'); };
-    const setInvalid = (group) => { group.classList.add('has-error');    group.querySelector('input,textarea').classList.add('error'); };
-
-    // Real-time email hint
-    const emailInput = document.getElementById('formEmail');
-    emailInput.addEventListener('input', () => {
-      const emailGroup = document.getElementById('emailGroup');
-      if (!emailInput.value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
-        setValid(emailGroup);
-      }
-    });
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      let valid = true;
-
-      const nameInput    = document.getElementById('formName');
-      const messageInput = document.getElementById('formMessage');
-      const nameGroup    = document.getElementById('nameGroup');
-      const emailGroup   = document.getElementById('emailGroup');
-      const messageGroup = document.getElementById('messageGroup');
-
-      // Validate name
-      if (!nameInput.value.trim()) {
-        setInvalid(nameGroup); valid = false;
-      } else { setValid(nameGroup); }
-
-      // Validate email
-      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailInput.value.trim() || !emailRe.test(emailInput.value)) {
-        setInvalid(emailGroup); valid = false;
-      } else { setValid(emailGroup); }
-
-      // Validate message
-      if (!messageInput.value.trim()) {
-        setInvalid(messageGroup); valid = false;
-      } else { setValid(messageGroup); }
-
-      if (!valid) return;
-
-      // Simulate successful submission (replace with real fetch/API call)
-      form.style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
-    });
-
-    /* ── 7. Navbar shadow on scroll ─────────────────────── */
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 30) {
-        navbar.style.boxShadow = '0 8px 40px rgba(0,0,0,0.5)';
-      } else {
-        navbar.style.boxShadow = 'none';
-      }
-    }, { passive: true });
-  </script>
-
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
 </body>
 </html>
