@@ -7,41 +7,35 @@
 <style>
 body {
     font-family: Arial;
-    background: linear-gradient(135deg, #e3f2fd, #f5f5f5);
+    background: #eef1f5;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
 .container {
-    width: 320px;
+    margin-top: 40px;
+    width: 350px;
     padding: 25px;
     background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
 }
 
 h2 {
     text-align: center;
-    margin-bottom: 15px;
 }
 
-input {
+input, select {
     width: 100%;
     padding: 8px;
-    margin: 5px 0;
+    margin: 6px 0;
     border-radius: 6px;
     border: 1px solid #ccc;
 }
 
-input.error {
-    border: 1px solid red;
-    background: #ffe6e6;
-}
-
 .skills {
-    margin: 10px 0;
+    text-align: left;
+    margin-top: 10px;
 }
 
 button {
@@ -50,59 +44,58 @@ button {
     margin-top: 10px;
     border: none;
     border-radius: 6px;
-    background: #1976d2;
+    background: #4CAF50;
     color: white;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 button:hover {
-    background: #0d47a1;
+    background: #333;
 }
 
 #result {
-    display: none;
     margin-top: 15px;
-    text-align: center;
     font-weight: bold;
-    color: green;
+    display: none;
 }
 
-.disabled {
-    opacity: 0.5;
-    pointer-events: none;
+.hidden {
+    display: none;
 }
 </style>
-
 </head>
 
 <body>
 
-<div class="container">
-    <h2>Анкета</h2>
+<div class="container" id="formBlock">
+<h2>Анкета</h2>
 
-    <input id="nameInput" placeholder="Имя">
-    <input id="ageInput" placeholder="Возраст">
+<input id="nameInput" placeholder="Имя">
+<input id="ageInput" placeholder="Возраст">
 
-    <div class="skills">
-        <label><input type="checkbox" id="skillMath"> Математика</label><br>
-        <label><input type="checkbox" id="skillProg"> Программирование</label><br>
-        <label><input type="checkbox" id="skillOther"> Другое</label>
-    </div>
+<select id="gender">
+<option value="">Пол</option>
+<option value="М">М</option>
+<option value="Ж">Ж</option>
+</select>
 
-    <button onclick="checkForm()">Отправить</button>
+<input id="university" placeholder="Образование (например: высшее)">
 
-    <div id="result">Меня возьмут</div>
+<div class="skills">
+<label><input type="checkbox" class="skill"> Математика</label><br>
+<label><input type="checkbox" class="skill"> Программирование</label><br>
+<label><input type="checkbox" class="skill"> Английский</label><br>
+<label><input type="checkbox" class="skill"> Коммуникация</label>
+</div>
 
-    <button onclick="randomColor()">Случайный фон</button>
+<button onclick="checkForm()">Меня возьмут?</button>
+<button onclick="enableEdit()">Редактировать</button>
+
+<p id="result"></p>
+
 </div>
 
 <script>
-function randomColor() {
-    document.body.style.background =
-        "#" + Math.floor(Math.random()*16777215).toString(16);
-}
-
 function validateName(name) {
     return /^[a-zA-Zа-яА-Я]+$/.test(name);
 }
@@ -111,45 +104,81 @@ function validateAge(age) {
     return Number.isInteger(Number(age)) && age >= 0;
 }
 
+function validateGender(g) {
+    return g === "М" || g === "Ж";
+}
+
+function getSkills() {
+    return Array.from(document.querySelectorAll(".skill"))
+        .filter(el => el.checked).length;
+}
+
+function hasSkill(text) {
+    let labels = document.querySelectorAll(".skills label");
+    for (let l of labels) {
+        if (l.innerText.includes(text) && l.querySelector("input").checked) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function lockCheckboxes() {
+    document.querySelectorAll(".skill").forEach(cb => cb.disabled = true);
+}
+
+function unlockInputs() {
+    document.querySelectorAll("input, select").forEach(el => el.disabled = false);
+}
+
+function lockInputs() {
+    document.querySelectorAll("input, select").forEach(el => el.disabled = true);
+}
+
 function checkForm() {
-    let nameInput = document.getElementById("nameInput");
-    let ageInput = document.getElementById("ageInput");
-
-    let name = nameInput.value;
-    let age = ageInput.value;
-
-    let math = document.getElementById("skillMath").checked;
-    let prog = document.getElementById("skillProg").checked;
-
-    nameInput.classList.remove("error");
-    ageInput.classList.remove("error");
-
-    let valid = true;
+    let name = document.getElementById("nameInput").value;
+    let age = document.getElementById("ageInput").value;
+    let gender = document.getElementById("gender").value;
+    let edu = document.getElementById("university").value.toLowerCase();
 
     if (!validateName(name)) {
-        nameInput.classList.add("error");
-        valid = false;
-    }
-
-    if (!validateAge(age)) {
-        ageInput.classList.add("error");
-        valid = false;
-    }
-
-    if (!valid) return;
-
-    // логика навыков (пункт 6)
-    if (math && prog) {
-        document.getElementById("result").style.display = "block";
-    } else {
-        alert("Недостаточно навыков");
+        alert("Имя некорректно");
         return;
     }
 
-    // блокировка формы (пункт 4)
-    document.querySelectorAll("input").forEach(el => el.disabled = true);
+    if (!validateAge(age)) {
+        alert("Возраст некорректен");
+        return;
+    }
 
-    document.querySelector(".skills").classList.add("disabled");
+    if (!validateGender(gender)) {
+        alert("Выберите пол");
+        return;
+    }
+
+    let result = document.getElementById("result");
+    result.style.display = "block";
+
+    let success = false;
+
+    if (hasSkill("Математика") && hasSkill("Программирование")) {
+        success = true;
+    }
+
+    if (edu.includes("высшее") && getSkills() >= 2) {
+        success = true;
+    }
+
+    result.innerText = success ? "Меня возьмут" : "Недостаточно навыков";
+
+    lockCheckboxes();
+    lockInputs();
+    document.getElementById("formBlock").classList.add("filled");
+}
+
+function enableEdit() {
+    unlockInputs();
+    document.querySelectorAll(".skill").forEach(cb => cb.disabled = false);
 }
 </script>
 
