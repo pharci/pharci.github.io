@@ -1,184 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Анкета</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume</title>
 
 <style>
-body {
-    font-family: Arial;
-    background: #eef1f5;
-    display: flex;
-    justify-content: center;
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,Arial;background:#0f172a;color:#e2e8f0;line-height:1.5}
+.container{max-width:900px;margin:auto;padding:20px}
+
+.card{
+    background:#1e293b;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 10px 30px #0005;
+    transition:.3s;
+}
+.card:hover{transform:translateY(-3px)}
+
+h1{font-size:28px;margin-bottom:5px}
+h2{font-size:18px;color:#38bdf8;margin-bottom:10px}
+p{opacity:.9}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+
+.tag{
+    display:inline-block;
+    padding:5px 10px;
+    margin:3px;
+    border-radius:8px;
+    background:#334155;
 }
 
-.container {
-    margin-top: 40px;
-    width: 350px;
-    padding: 25px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+button{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#38bdf8;
+    color:#000;
+    cursor:pointer;
+    margin-top:10px;
 }
+button:hover{background:#0ea5e9}
 
-h2 {
-    text-align: center;
-}
+.hidden{display:none}
 
-input, select {
-    width: 100%;
-    padding: 8px;
-    margin: 6px 0;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-.skills {
-    text-align: left;
-    margin-top: 10px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 6px;
-    background: #4CAF50;
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #333;
-}
-
-#result {
-    margin-top: 15px;
-    font-weight: bold;
-    display: none;
-}
-
-.hidden {
-    display: none;
+@media(max-width:700px){
+    .grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="formBlock">
-<h2>Анкета</h2>
+<div class="container">
 
-<input id="nameInput" placeholder="Имя">
-<input id="ageInput" placeholder="Возраст">
-
-<select id="gender">
-<option value="">Пол</option>
-<option value="М">М</option>
-<option value="Ж">Ж</option>
-</select>
-
-<input id="university" placeholder="Образование (например: высшее)">
-
-<div class="skills">
-<label><input type="checkbox" class="skill"> Математика</label><br>
-<label><input type="checkbox" class="skill"> Программирование</label><br>
-<label><input type="checkbox" class="skill"> Английский</label><br>
-<label><input type="checkbox" class="skill"> Коммуникация</label>
+<div class="card">
+    <h1>Алексей</h1>
+    <p>Студент МГТУ «СТАНКИН»</p>
+    <p>Направление: Автоматизация технологических процессов и производств</p>
 </div>
 
-<button onclick="checkForm()">Меня возьмут?</button>
-<button onclick="enableEdit()">Редактировать</button>
+<div class="card">
+    <h2>Обо мне</h2>
+    <p>Развиваюсь в сторону backend и web-разработки. Параллельно изучаю фундаментальные основы программирования и системное мышление. Интерес к созданию реальных продуктов.</p>
+</div>
 
-<p id="result"></p>
+<div class="card">
+    <h2>Опыт</h2>
+    <p><b>lightbikeshop.ru</b> — разработка и поддержка интернет-магазина (Django)</p>
+    <button onclick="toggle('exp')">Подробнее</button>
+    <div id="exp" class="hidden">
+        <p>• Backend логика</p>
+        <p>• Работа с БД</p>
+        <p>• Поддержка проекта 3+ года</p>
+    </div>
+</div>
+
+<div class="card grid">
+    <div>
+        <h2>Навыки</h2>
+        <div class="tag">Python</div>
+        <div class="tag">Django</div>
+        <div class="tag">C#</div>
+        <div class="tag">C++</div>
+        <div class="tag">Qt</div>
+        <div class="tag">HTML/CSS/JS</div>
+    </div>
+
+    <div>
+        <h2>Проекты</h2>
+        <p>• Симулятор конвейера (Qt, C++)</p>
+        <p>• Интернет-магазин</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Цель</h2>
+    <p>Стать backend-разработчиком. Перейти из учебных задач в реальную индустрию.</p>
+</div>
+
+<div class="card">
+    <h2>Контакты</h2>
+    <button onclick="scrollToForm()">Связаться</button>
+</div>
+
+<div class="card" id="contact">
+    <h2>Форма</h2>
+    <input id="email" placeholder="Email">
+    <textarea id="msg" placeholder="Сообщение"></textarea>
+    <button onclick="send()">Отправить</button>
+</div>
 
 </div>
 
 <script>
-function validateName(name) {
-    return /^[a-zA-Zа-яА-Я]+$/.test(name);
+function toggle(id){
+    document.getElementById(id).classList.toggle("hidden");
 }
 
-function validateAge(age) {
-    return Number.isInteger(Number(age)) && age >= 0;
+function scrollToForm(){
+    document.getElementById("contact").scrollIntoView({behavior:"smooth"});
 }
 
-function validateGender(g) {
-    return g === "М" || g === "Ж";
-}
-
-function getSkills() {
-    return Array.from(document.querySelectorAll(".skill"))
-        .filter(el => el.checked).length;
-}
-
-function hasSkill(text) {
-    let labels = document.querySelectorAll(".skills label");
-    for (let l of labels) {
-        if (l.innerText.includes(text) && l.querySelector("input").checked) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function lockCheckboxes() {
-    document.querySelectorAll(".skill").forEach(cb => cb.disabled = true);
-}
-
-function unlockInputs() {
-    document.querySelectorAll("input, select").forEach(el => el.disabled = false);
-}
-
-function lockInputs() {
-    document.querySelectorAll("input, select").forEach(el => el.disabled = true);
-}
-
-function checkForm() {
-    let name = document.getElementById("nameInput").value;
-    let age = document.getElementById("ageInput").value;
-    let gender = document.getElementById("gender").value;
-    let edu = document.getElementById("university").value.toLowerCase();
-
-    if (!validateName(name)) {
-        alert("Имя некорректно");
-        return;
-    }
-
-    if (!validateAge(age)) {
-        alert("Возраст некорректен");
-        return;
-    }
-
-    if (!validateGender(gender)) {
-        alert("Выберите пол");
-        return;
-    }
-
-    let result = document.getElementById("result");
-    result.style.display = "block";
-
-    let success = false;
-
-    if (hasSkill("Математика") && hasSkill("Программирование")) {
-        success = true;
-    }
-
-    if (edu.includes("высшее") && getSkills() >= 2) {
-        success = true;
-    }
-
-    result.innerText = success ? "Меня возьмут" : "Недостаточно навыков";
-
-    lockCheckboxes();
-    lockInputs();
-    document.getElementById("formBlock").classList.add("filled");
-}
-
-function enableEdit() {
-    unlockInputs();
-    document.querySelectorAll(".skill").forEach(cb => cb.disabled = false);
+function send(){
+    let email=document.getElementById("email").value;
+    if(!email.includes("@")) return alert("Некорректный email");
+    alert("Отправлено");
 }
 </script>
 
