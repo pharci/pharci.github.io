@@ -44,24 +44,46 @@
 </head>
 <body>
     <div class="container">
-        <h1 id="name">Алексей</h1>
-        <p id="surname">Иванов</p>
         <img src="https://via.placeholder.com/100">
         <br><br>
-        <input type="text" id="inputSurname" placeholder="Новая фамилия">
-        <br>
-        <button onclick="changeSurname()">Изменить фамилию</button>
+        <input id="nameInput" placeholder="Имя">
+        <input id="ageInput" placeholder="Возраст">
+        <label><input type="checkbox" id="skillMath">Математика</label>
+        <label><input type="checkbox" id="skillProg">Программирование</label>
+        <button onclick="checkForm()">Отправить</button>
+        <p id="result" style="display:none;">Меня возьмут</p>
         <br>
         <button onclick="randomColor()">Случайный фон</button>
     </div>
     <script>
-        function changeSurname() {
-            let value = document.getElementById("inputSurname").value;
-            document.getElementById("surname").innerText = value;
-        }
         function randomColor() {
             document.body.style.background = "#" + Math.floor(Math.random()*16777215).toString(16);
         }
+        function validateName(name) {
+            return /^[a-zA-Zа-яА-Я]+$/.test(name);
+        }
+
+        function validateAge(age) {
+            return Number.isInteger(Number(age)) && age >= 0;
+        }
+
+        function checkForm() {
+            let name = document.getElementById("nameInput").value;
+            let age = document.getElementById("ageInput").value;
+
+            if (!validateName(name)) {
+                alert("Имя некорректно");
+                return;
+            }
+
+            if (!validateAge(age)) {
+                alert("Возраст некорректен");
+                return;
+            }
+
+            document.getElementById("result").style.display = "block";
+        }
     </script>
+
 </body>
 </html>
